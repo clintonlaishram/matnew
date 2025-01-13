@@ -1,7 +1,8 @@
 /* General Styles */
 .container {
   padding: 20px;
-  color: #fff; /* Adjust text color for better contrast */
+  color: #fff; /* White text for dark background */
+  background-color: #000; /* Black background */
 }
 
 .title {
@@ -18,6 +19,11 @@
   text-align: center;
 }
 
+.total-balance {
+  font-weight: bold;
+  color: #0f0; /* Green color for balance */
+}
+
 .error {
   color: red;
   font-size: 16px;
@@ -25,58 +31,63 @@
   margin: 10px 0;
 }
 
-/* Search Container */
-.search-container {
+/* Filter Container */
+.filter-container {
   display: flex;
-  color: red;
   justify-content: center;
+  align-items: center;
+  gap: 10px;
   margin-bottom: 20px;
 }
 
-.search-container input {
+.filter-container input,
+.filter-container select {
   padding: 10px;
-  width: 70%;
-  max-width: 300px;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 14px;
+  background-color: #222; /* Dark input background */
+  color: #fff; /* White text */
+}
+
+.filter-container input::placeholder {
+  color: #888; /* Placeholder text color */
+}
+
+.filter-container input:focus,
+.filter-container select:focus {
+  outline: none;
+  border-color: #444; /* Focus border color */
 }
 
 /* Table Container */
 .table-container {
-  overflow-x: auto;
+  overflow-x: auto; /* Enable horizontal scrolling for the table */
 }
 
 .styled-table {
   width: 100%;
   border-collapse: collapse;
-  text-align: left;
 }
 
 .styled-table th,
 .styled-table td {
-  border: 1px solid #ddd;
+  border: 1px solid #444; /* Darker border for table */
   padding: 8px;
+  text-align: center;
 }
 
 .styled-table th {
-  background-color: #444;
-  color: white;
-  text-align: center;
-  font-weight: bold;
-}
-
-.styled-table td {
-  text-align: center;
-  color: #ddd;
+  background-color: #333; /* Darker header background */
+  color: #fff; /* White header text */
 }
 
 .styled-table tr:nth-child(even) {
-  background-color: #2b2b2b;
+  background-color: #222; /* Alternate row background */
 }
 
 .styled-table tr:hover {
-  background-color: #3a3a3a;
+  background-color: #444; /* Highlight row on hover */
 }
 
 /* Pagination Controls */
@@ -89,7 +100,7 @@
 
 .pagination button {
   padding: 8px 16px;
-  background-color: #444;
+  background-color: #444; /* Dark button background */
   color: white;
   border: none;
   border-radius: 4px;
@@ -98,11 +109,11 @@
 }
 
 .pagination button:hover {
-  background-color: #333;
+  background-color: #333; /* Darker background on hover */
 }
 
 .pagination button:disabled {
-  background-color: #777;
+  background-color: #777; /* Disabled button color */
   cursor: not-allowed;
 }
 
@@ -111,10 +122,11 @@
   color: #fff;
 }
 
-/* PDF Selection */
+/* PDF Selection Controls */
 .pdf-selection {
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 10px;
   margin-top: 20px;
 }
@@ -125,6 +137,8 @@
   text-align: center;
   border: 1px solid #ddd;
   border-radius: 4px;
+  background-color: #222; /* Dark input background */
+  color: #fff;
 }
 
 .pdf-selection label {
@@ -154,27 +168,45 @@
 
 /* Mobile View */
 @media (max-width: 768px) {
-  .table-container {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+  .filter-container {
+    flex-direction: column;
+    align-items: stretch;
   }
 
-  .search-container,
-  .pagination,
-  .pdf-selection {
-    flex-direction: column;
+  .filter-container input,
+  .filter-container select {
+    width: 100%;
+    margin-bottom: 10px;
+  }
 
+  .pagination {
+    flex-direction: column;
     align-items: center;
   }
 
-  .search-container input,
-  .pdf-selection input {
-    width: 90%;
+  .pagination button {
+    width: 100%;
     max-width: 300px;
     margin-bottom: 10px;
   }
 
-  .pagination button,
+  .styled-table th,
+  .styled-table td {
+    font-size: 14px;
+    padding: 6px;
+  }
+
+  .styled-table {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* Mobile-friendly scrolling */
+  }
+
+  .pdf-selection {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .pdf-selection input,
   .pdf-selection button {
     width: 90%;
     max-width: 300px;
@@ -184,11 +216,5 @@
   .info,
   .total-balance {
     font-size: 16px;
-  }
-
-  .styled-table th,
-  .styled-table td {
-    font-size: 14px;
-    padding: 6px;
   }
 }

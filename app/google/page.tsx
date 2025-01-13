@@ -8,7 +8,7 @@ import "./styles.css";
 
 type SheetRow = string[];
 
-export default function FilteredGoogleSheetWithSummation() {
+export default function FilteredGoogleSheetWithFilters() {
   const [loggedInEmail, setLoggedInEmail] = useState<string | null>(null);
   const [data, setData] = useState<SheetRow[]>([]);
   const [filteredData, setFilteredData] = useState<SheetRow[]>([]);
@@ -18,6 +18,8 @@ export default function FilteredGoogleSheetWithSummation() {
   const [startPage, setStartPage] = useState<number>(1);
   const [endPage, setEndPage] = useState<number>(1);
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [statusFilter, setStatusFilter] = useState<string>(""); // Status filter
+  const [deliveryDateFilter, setDeliveryDateFilter] = useState<string>(""); // Delivery date filter
   const rowsPerPage = 15; // Number of rows per page
   const router = useRouter();
 
@@ -64,16 +66,26 @@ export default function FilteredGoogleSheetWithSummation() {
 
   // Handle Real-Time Search
   useEffect(() => {
-    const lowerCaseTerm = searchTerm.toLowerCase();
-    const searchResults =
-      searchTerm.trim() === ""
-        ? data
-        : data.filter((row) =>
-            row.some((cell) => cell.toLowerCase().includes(lowerCaseTerm))
-          );
-    setFilteredData(searchResults);
+    let filtered = data;
+
+    if (searchTerm.trim() !== "") {
+      const lowerCaseTerm = searchTerm.toLowerCase();
+      filtered = filtered.filter((row) =>
+        row.some((cell) => cell.toLowerCase().includes(lowerCaseTerm))
+      );
+    }
+
+    if (statusFilter === "Pending") {
+      filtered = filtered.filter((row) => row[7]?.startsWith("Pen"));
+    } else if (statusFilter === "Out for Delivery") {
+      filtered = filtered.filter((row) => row[7]?.startsWith("Out"));
+    } else if (statusFilter === "Delivery by Date" && deliveryDateFilter) {
+      filtered = filtered.filter((row) => row[7]?.includes(deliveryDateFilter));
+    }
+
+    setFilteredData(filtered);
     setCurrentPage(1); // Reset to the first page when filtering
-  }, [searchTerm, data]);
+  }, [searchTerm, statusFilter, deliveryDateFilter, data]);
 
   // Pagination Logic
   const totalPages = Math.ceil((filteredData.length - 1) / rowsPerPage); // Skip header row
@@ -144,17 +156,46 @@ export default function FilteredGoogleSheetWithSummation() {
       </p>
       {error ? (
         <p className="error">{error}</p>
-      ) : filteredData.length > 1 ? (
+      ) : (
         <>
-          {/* Search Bar */}
-          <div className="search-container">
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
+          {/* Search and Filter Bar */}
+<div className="filter-container">
+  <input
+    type="text"
+    placeholder="Search..."
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+  />
+  <select
+    value={statusFilter}
+    onChange={(e) => {
+      setStatusFilter(e.target.value);
+      if (e.target.value !== "Delivery by Date") {
+        setDeliveryDateFilter(""); // Reset delivery date filter when another filter is selected
+      }
+    }}
+  >
+    <option value="">Filter by Status</option>
+    <option value="Pending">Pending</option>
+    <option value="Out for Delivery">Out for Delivery</option>
+    <option value="Delivery by Date">Delivery by Date</option>
+  </select>
+  {statusFilter === "Delivery by Date" && (
+    <select
+      value={deliveryDateFilter}
+      onChange={(e) => setDeliveryDateFilter(e.target.value)}
+    >
+      <option value="">Select Delivery Date</option>
+      {[...new Set(data.map((row) => row[7]))] // Get unique values from the Status column
+        .filter((status) => status.startsWith("Deliver")) // Filter for values starting with "Deliver"
+        .map((uniqueDate, index) => (
+          <option key={index} value={uniqueDate}>
+            {uniqueDate}
+          </option>
+        ))}
+    </select>
+  )}
+</div>
 
           {/* Table */}
           <div className="table-container">
@@ -174,33 +215,32 @@ export default function FilteredGoogleSheetWithSummation() {
                 </tr>
               </thead>
               <tbody>
-              {(() => {
-                let cumulativeBalance = filteredData
-                  .slice(1, 1 + (currentPage - 1) * rowsPerPage) // Rows before current page
-                  .reduce((sum: number, row: SheetRow) => sum + (parseFloat(row[5]) || 0), 0);
-            
-                return paginatedData.map((row, rowIndex) => {
-                  const tsb = parseFloat(row[5]) || 0; // Parse column F (TSB)
-                  cumulativeBalance += tsb; // Update cumulative balance
-                
-                  return (
-                    <tr key={rowIndex}>
-                      <td>{(currentPage - 1) * rowsPerPage + rowIndex + 1}</td> {/* SL No. */}
-                      <td>{row[0]}</td> {/* Date */}
-                      <td>{row[1]}</td> {/* Name */}
-                      <td>{row[2]}</td> {/* Address */}
-                      <td>{row[3]}</td> {/* PB */}
-                      <td>{row[4]}</td> {/* DC */}
-                      <td>{row[5]}</td> {/* TSB */}
-                      <td>{row[6]}</td> {/* Note */}
-                      <td>{row[7]}</td> {/* Status */}
-                      <td>{cumulativeBalance.toFixed(2)}</td> {/* Cumulative Balance */}
-                    </tr>
-                  );
-                });
-              })()}
-            </tbody>
-            
+                {(() => {
+                  let cumulativeBalance = filteredData
+                    .slice(1, 1 + (currentPage - 1) * rowsPerPage) // Rows before current page
+                    .reduce((sum: number, row: SheetRow) => sum + (parseFloat(row[5]) || 0), 0);
+
+                  return paginatedData.map((row, rowIndex) => {
+                    const tsb = parseFloat(row[5]) || 0; // Parse column F (TSB)
+                    cumulativeBalance += tsb; // Update cumulative balance
+
+                    return (
+                      <tr key={rowIndex}>
+                        <td>{(currentPage - 1) * rowsPerPage + rowIndex + 1}</td> {/* SL No. */}
+                        <td>{row[0]}</td> {/* Date */}
+                        <td>{row[1]}</td> {/* Name */}
+                        <td>{row[2]}</td> {/* Address */}
+                        <td>{row[3]}</td> {/* PB */}
+                        <td>{row[4]}</td> {/* DC */}
+                        <td>{row[5]}</td> {/* TSB */}
+                        <td>{row[6]}</td> {/* Note */}
+                        <td>{row[7]}</td> {/* Status */}
+                        <td>{cumulativeBalance.toFixed(2)}</td> {/* Cumulative Balance */}
+                      </tr>
+                    );
+                  });
+                })()}
+              </tbody>
             </table>
           </div>
 
@@ -244,8 +284,6 @@ export default function FilteredGoogleSheetWithSummation() {
             <button onClick={downloadPDF}>Download PDF</button>
           </div>
         </>
-      ) : (
-        <p>No data available for the logged-in user.</p>
       )}
     </div>
   );
