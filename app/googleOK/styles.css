@@ -1,0 +1,223 @@
+/* General Styles */
+.container {
+  padding: 20px;
+}
+
+.title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.info {
+  font-size: 16px;
+  margin-bottom: 10px;
+  text-align: center;
+  color: #fff;
+}
+
+.total-balance {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #0f0;
+}
+
+.error {
+  color: red;
+  font-size: 16px;
+  text-align: center;
+  margin: 10px 0;
+}
+
+/* Search Container */
+.search-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.search-container input {
+  padding: 10px;
+  width: 70%;
+  max-width: 300px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.search-container button {
+  padding: 10px 20px;
+  background-color: #444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.search-container button:hover {
+  background-color: #333;
+}
+
+/* Table Styles */
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.styled-table th,
+.styled-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.styled-table th {
+  background-color: #444;
+  color: white;
+  text-align: center;
+  font-weight: bold;
+}
+
+.styled-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.styled-table tr:hover {
+  background-color: #ddd;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.pagination button {
+  padding: 8px 16px;
+  background-color: #444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pagination button:hover {
+  background-color: #333;
+}
+
+.pagination button:disabled {
+  background-color: #777;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  font-size: 16px;
+  color: #fff;
+}
+
+/* PDF Selection */
+.pdf-selection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.pdf-selection label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.pdf-selection input {
+  padding: 8px;
+  width: 50px;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.pdf-selection button {
+  padding: 10px 20px;
+  background-color: #444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pdf-selection button:hover {
+  background-color: #333;
+}
+
+.pdf-selection button:disabled {
+  background-color: #777;
+  cursor: not-allowed;
+}
+
+/* Mobile View */
+@media (max-width: 768px) {
+  .styled-table {
+    display: none; /* Hide the table */
+  }
+
+  .search-container,
+  .pagination,
+  .pdf-selection {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .search-container input,
+  .search-container button,
+  .pdf-selection input,
+  .pdf-selection button {
+    width: 90%;
+    max-width: 300px;
+    margin-bottom: 10px;
+  }
+
+  .info,
+  .total-balance {
+    font-size: 14px;
+  }
+
+  .mobile-view {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .mobile-row {
+    border: 1px solid #ddd;
+    padding: 10px;
+    background-color: white;
+    border-radius: 4px;
+  }
+
+  .mobile-row div {
+    margin-bottom: 5px;
+    font-size: 14px;
+  }
+
+  .mobile-row .row-label {
+    font-weight: bold;
+    color: #333;
+  }
+
+  .mobile-row .row-value {
+    color: #555;
+  }
+}

@@ -7,6 +7,7 @@ export type UserDetails = {
   name: string;
   phone: string;
   address: string;
+  email?: string; // Add this if missing
 };
 
 export const useUserDetails = () => {

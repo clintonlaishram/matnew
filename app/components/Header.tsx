@@ -72,7 +72,7 @@ const Header: React.FC = () => {
             <Link href="/delivery-rates" className={styles.navButton} onClick={() => setMenuOpen(false)}>
               Delivery Rates
             </Link>
-            <Link href="/user_orders" className={styles.navButton} onClick={() => setMenuOpen(false)}>
+            <Link href="/delivery_orders" className={styles.navButton} onClick={() => setMenuOpen(false)}>
               Delivery Orders
             </Link>
             <Link href="/profile" className={styles.navButton} onClick={() => setMenuOpen(false)}>

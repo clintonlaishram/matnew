@@ -1,0 +1,194 @@
+/* General Styles */
+.container {
+  padding: 20px;
+  color: #fff; /* Adjust text color for better contrast */
+}
+
+.title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.info,
+.total-balance {
+  font-size: 18px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.error {
+  color: red;
+  font-size: 16px;
+  text-align: center;
+  margin: 10px 0;
+}
+
+/* Search Container */
+.search-container {
+  display: flex;
+  color: red;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.search-container input {
+  padding: 10px;
+  width: 70%;
+  max-width: 300px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/* Table Container */
+.table-container {
+  overflow-x: auto;
+}
+
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.styled-table th,
+.styled-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.styled-table th {
+  background-color: #444;
+  color: white;
+  text-align: center;
+  font-weight: bold;
+}
+
+.styled-table td {
+  text-align: center;
+  color: #ddd;
+}
+
+.styled-table tr:nth-child(even) {
+  background-color: #2b2b2b;
+}
+
+.styled-table tr:hover {
+  background-color: #3a3a3a;
+}
+
+/* Pagination Controls */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.pagination button {
+  padding: 8px 16px;
+  background-color: #444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pagination button:hover {
+  background-color: #333;
+}
+
+.pagination button:disabled {
+  background-color: #777;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  font-size: 16px;
+  color: #fff;
+}
+
+/* PDF Selection */
+.pdf-selection {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.pdf-selection input {
+  padding: 8px;
+  width: 50px;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.pdf-selection label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.pdf-selection button {
+  padding: 10px 20px;
+  background-color: #444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pdf-selection button:hover {
+  background-color: #333;
+}
+
+.pdf-selection button:disabled {
+  background-color: #777;
+  cursor: not-allowed;
+}
+
+/* Mobile View */
+@media (max-width: 768px) {
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .search-container,
+  .pagination,
+  .pdf-selection {
+    flex-direction: column;
+
+    align-items: center;
+  }
+
+  .search-container input,
+  .pdf-selection input {
+    width: 90%;
+    max-width: 300px;
+    margin-bottom: 10px;
+  }
+
+  .pagination button,
+  .pdf-selection button {
+    width: 90%;
+    max-width: 300px;
+    margin-bottom: 10px;
+  }
+
+  .info,
+  .total-balance {
+    font-size: 16px;
+  }
+
+  .styled-table th,
+  .styled-table td {
+    font-size: 14px;
+    padding: 6px;
+  }
+}

@@ -71,7 +71,6 @@ const Footer: React.FC = () => {
       </div>
       <div className={styles['footer-right']}>
         <Link href="/about-us">About Us</Link>
-        <Link href="/terms">Terms and Conditions</Link>
         <Link href="/employee-login">Employee Portal</Link>
         <Link href="/teams">Team Portal</Link>
       </div>
