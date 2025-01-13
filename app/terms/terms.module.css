@@ -1,0 +1,95 @@
+/* Page container styling */
+.termsPage {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  font-family: 'Arial', sans-serif;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: #eeeeee;
+  line-height: 1.6;
+}
+
+/* Header styling */
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.header h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #ffffff; /* Green for emphasis */
+  margin: 0;
+}
+
+/* Content container */
+.content {
+  font-size: 1rem;
+  color: #fffcfc;
+}
+
+/* Terms list styling */
+.termsList {
+  list-style-type: decimal;
+  padding-left: 2rem;
+  margin-bottom: 2rem;
+}
+
+.termsList > li {
+  margin-bottom: 1.5rem;
+}
+
+.termsList > li > strong {
+  font-weight: bold;
+  color: #ffffff; /* Green headings */
+}
+
+/* Sub-list styling */
+.subList {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.subList > li {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+/* Link styling for content */
+.a {
+  color: #017c18;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.a:hover {
+  color: #005b13;
+  text-decoration: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .termsPage {
+    padding: 1.5rem;
+    margin: 1rem auto;
+  }
+
+  .header h1 {
+    font-size: 2rem;
+  }
+
+  .content {
+    font-size: 0.95rem;
+  }
+
+  .termsList > li {
+    margin-bottom: 1rem;
+  }
+
+  .subList > li {
+    font-size: 0.9rem;
+  }
+}

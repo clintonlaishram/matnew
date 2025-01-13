@@ -1,0 +1,138 @@
+/* Header Layout */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  height: 60px;
+  border-bottom: 2px solid #303030;
+  background-color: #000; /* Black background */
+}
+
+/* Logo Styles */
+.logo {
+  flex: 0 1 auto;
+}
+
+.logoImage {
+  height: 50px;
+  width: auto;
+}
+
+/* Navigation Menu */
+.nav {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  transition: all 0.3s ease-in-out;
+}
+
+.navButton {
+  text-decoration: none;
+  color: #cccccc; /* Subtle gray text */
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navButton:hover {
+  background-color: #303030; /* Dark gray background on hover */
+  color: white; /* Change text to white on hover */
+}
+
+.createTaskButton {
+  text-decoration: none;
+  color: white;
+  background-color: #064f1a; /* Green background */
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.createTaskButton:hover {
+  background-color: #06650d; /* Darker green on hover */
+}
+
+.icon {
+  font-size: 1.5rem;
+  color: white; /* White icons */
+  cursor: pointer;
+}
+
+/* Hamburger Menu Button (Mobile) */
+.menuButton {
+  display: none; /* Hidden by default on larger screens */
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 10;
+}
+
+/* Dropdown Menu (Mobile) */
+.nav.open {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: absolute;
+  top: 60px;
+  left: 0;
+  background-color: #000; /* Black background */
+  width: 100%;
+  padding: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+
+.nav.open .navButton,
+.nav.open .createTaskButton {
+  width: 100%; /* Full width buttons */
+  text-align: left; /* Align text to left */
+  padding: 1rem;
+  font-size: 1rem; /* Larger text for mobile */
+}
+
+/* Logout Button */
+.logoutButton {
+  background-color: #075515; /* Green background */
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logoutButton:hover {
+  background-color: #ffffff; /* White background */
+  color: #075515; /* Green text */
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  .nav {
+    display: none; /* Hidden by default */
+  }
+
+  .menuButton {
+    display: block; /* Show hamburger menu */
+  }
+
+  .logoImage {
+    height: 40px; /* Smaller logo for mobile */
+  }
+
+  .nav.open {
+    display: flex; /* Display dropdown when open */
+  }
+
+  .navButton,
+  .createTaskButton {
+    width: 100%;
+    padding: 1rem;
+    text-align: left;
+    font-size: 1rem;
+  }
+}

@@ -1,0 +1,43 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .title {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .pricingContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .service {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 600px;
+  }
+  
+  .service h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+  
+  .service p {
+    margin-bottom: 20px;
+  }
+  
+  .link {
+    color: #0070f3;
+    text-decoration: underline;
+  }
+  

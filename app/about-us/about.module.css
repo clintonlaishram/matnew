@@ -1,0 +1,177 @@
+/* General container settings */
+.container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Banner section */
+.banner {
+  background-color: #2f855a; /* dark green */
+  color: white;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+.bannerText {
+  font-size: 48px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.bannerDescription {
+  font-size: 18px;
+  font-weight: 300;
+  margin-top: 10px;
+  max-width: 800px;
+  text-align: center;
+}
+
+/* Hero image */
+.heroImage {
+  width: 100%;
+  max-width: 1200px;
+  border-radius: 10px;
+  margin-bottom: 40px;
+}
+
+/* Journey section */
+.journeySection {
+  width: 100%;
+  max-width: 1200px;
+}
+
+.sectionTitle {
+  font-size: 32px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.timeline {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 40px;
+}
+
+.timelineItem {
+  background-color: #e6e6e6;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.timelineItem:hover {
+  background-color: #68d391; /* light green */
+  transform: scale(1.05);
+}
+
+.timelineItem.active {
+  background-color: #48bb78; /* medium green */
+}
+
+.timelineItem h3 {
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.timelineItem p {
+  font-size: 16px;
+  font-weight: 300;
+}
+
+/* Image carousel */
+.imageCarousel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.imageCarousel img {
+  width: 80%;
+  max-width: 600px;
+  border-radius: 10px;
+}
+
+/* Social media section */
+.socialSection {
+  margin-top: 50px;
+  text-align: center;
+}
+
+.socialSection p {
+  font-size: 18px;
+  font-weight: 400;
+  margin-bottom: 20px;
+}
+
+.socialIcons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.icon {
+  font-size: 30px;
+  color: #2f855a;
+  transition: color 0.3s ease;
+}
+
+.icon:hover {
+  color: #48bb78; /* Medium green */
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  .bannerText {
+    font-size: 32px;
+  }
+
+  .bannerDescription {
+    font-size: 16px;
+  }
+
+  .timeline {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .timelineItem {
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .imageCarousel img {
+    width: 100%;
+  }
+
+  .socialIcons {
+    gap: 15px;
+  }
+
+  .icon {
+    font-size: 24px;
+  }
+}
+.links {
+  font-weight: bold;
+  text-align: center;
+  color: #ffffff; /* White color for emphasis */
+  text-decoration: underline; /* Underline the links */
+  transition: color 0.3s ease; /* Smooth color transition */
+}
+
+.links:hover {
+  color: #008f0c; /* Golden color on hover */
+}

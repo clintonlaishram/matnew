@@ -1,0 +1,67 @@
+.container {
+    color: white;
+    background-color: black;
+    padding: 20px;
+    max-width: 900px;
+    margin: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .title {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+  
+  .mainSection {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  
+  .sideSection {
+    flex: 1;
+  }
+  
+  .label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .inputField {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    background-color: black;
+    color: white;
+    margin-bottom: 10px;
+  }
+  
+  .mapContainer {
+    position: relative;
+    margin-top: 20px;
+  }
+  
+  .currentLocationBtn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 10px;
+    background-color: green;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .result {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-top: 20px;
+  }
+  

@@ -1,0 +1,145 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    color: #333;
+  }
+  
+  .ordersTable {
+    width: 80%;
+    max-width: 1200px;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .ordersTable th,
+  .ordersTable td {
+    padding: 10px;
+    text-align: left;
+  }
+  
+  .ordersTable th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+  }
+  
+  .ordersTable td {
+    border: 1px solid #ddd;
+  }
+  
+  .ordersTable tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .error {
+    color: #f44336;
+    font-size: 16px;
+    margin-top: 10px;
+    text-align: center;
+  }
+  
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .modalContent {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+  }
+  
+  .modalLabel {
+    display: block;
+    margin: 10px 0;
+  }
+  
+  .modalSelect,
+  .modalInput {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .modalActions {
+    margin-top: 20px;
+  }
+  
+  .saveButton {
+    background: #4caf50;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .cancelButton {
+    background: #f44336;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .editButton {
+    background: #2196f3;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  /* Mobile Section Styles */
+  .mobileRecord {
+    display: none;
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+  
+  .mobileRecord h3 {
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .mobileRecord p {
+    margin: 5px 0;
+    font-size: 14px;
+  }
+  
+  .mobileRecord p span {
+    font-weight: bold;
+  }
+  
+  @media (max-width: 768px) {
+    .ordersTable {
+      display: none;
+    }
+  
+    .mobileRecord {
+      display: block;
+    }
+  }
+  

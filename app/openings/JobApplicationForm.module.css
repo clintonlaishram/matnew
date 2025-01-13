@@ -1,0 +1,164 @@
+/* Form container */
+.formContainer {
+  max-width: 40rem;
+  margin: 2rem auto;
+  padding: 2rem;
+
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: 'Arial', sans-serif;
+}
+
+/* Input group */
+.inputGroup {
+  margin-bottom: 1.5rem;
+}
+
+/* Labels */
+.label {
+  display: block;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #ececec;
+  margin-bottom: 0.5rem;
+}
+
+/* Input, textarea, and select fields */
+.input,
+.textarea,
+.select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #383838;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  background-color: #323232; /* Light gray background for inputs */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input:focus,
+.textarea:focus,
+.select:focus {
+  outline: none;
+  border-color: #017c18;
+  box-shadow: 0 0 0 3px rgba(1, 124, 24, 0.2);
+}
+
+/* Checkbox */
+.checkbox {
+  height: 1rem;
+  width: 1rem;
+  border: 1px solid #cccccc;
+  border-radius: 0.25rem;
+  background-color: #e5e7eb; /* Light gray background for checkbox */
+  margin-right: 0.5rem;
+}
+
+.checkboxLabel {
+  font-size: 1rem;
+  color: #e6e3e3;
+}
+
+/* Textarea styling */
+.textarea {
+  resize: vertical;
+  min-height: 4rem;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Link styling */
+.link {
+  color: #017c18;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.link:hover {
+  color: #004d12;
+  text-decoration: none;
+}
+
+/* Submit button */
+.submitButton {
+  display: inline-block;
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  color: #ffffff;
+  background-color: #017c18;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submitButton:hover {
+  background-color: #005b13;
+}
+
+/* Status message */
+.statusMessage {
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: #ff0000;
+  text-align: center;
+}
+
+/* Dynamic fields for specific positions */
+.dynamicFields {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f3f4f6; /* Match form background */
+  border: 1px solid #cccccc;
+  border-radius: 0.375rem;
+}
+
+.dynamicFields p {
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  color: #555555;
+}
+
+/* Thank you message */
+.thankYouMessage {
+  text-align: center;
+  padding: 2rem;
+}
+
+.thankYouMessage h1 {
+  font-size: 2rem;
+  color: #017c18;
+  margin-bottom: 1rem;
+}
+
+.thankYouMessage p {
+  font-size: 1rem;
+  color: #555555;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .formContainer {
+    padding: 1.5rem;
+  }
+
+  .label {
+    font-size: 0.875rem;
+  }
+
+  .input,
+  .textarea,
+  .select {
+    font-size: 0.875rem;
+  }
+
+  .submitButton {
+    font-size: 0.875rem;
+  }
+
+  .thankYouMessage h1 {
+    font-size: 1.5rem;
+  }
+}
