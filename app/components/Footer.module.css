@@ -32,3 +32,34 @@
   font-size: 14px;
   color: #cccccc; /* Subtle gray text */
 }
+
+/* Mobile View - Responsive */
+@media (max-width: 768px) {
+  .footer {
+    padding: 15px; /* Reduce padding for smaller screens */
+  }
+
+  .footer a {
+    font-size: 0.8rem; /* Slightly smaller font size for better readability */
+    margin: 5px 8px; /* Adjust spacing between links */
+  }
+
+  .footer p {
+    font-size: 12px; /* Reduce font size for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    padding: 10px; /* Further reduce padding on very small screens */
+  }
+
+  .footer a {
+    font-size: 0.75rem; /* Even smaller font size for very small screens */
+    margin: 5px 5px; /* Further adjust link spacing */
+  }
+
+  .footer p {
+    font-size: 11px; /* Slightly smaller font size for small devices */
+  }
+}
