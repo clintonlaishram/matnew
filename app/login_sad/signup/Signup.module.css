@@ -1,0 +1,96 @@
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .h1 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: #333;
+  }
+  
+  .form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .inputField {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  
+  .submitButton {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .submitButton:hover {
+    background-color: #0056b3;
+  }
+  
+  .statusMessage {
+    color: #ff0000;
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  .label {
+    font-size: 1rem;
+    margin-bottom: 8px;
+    color: #333;
+  }
+  
+  .formGroup {
+    margin-bottom: 15px;
+  }
+  
+  .textarea {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    min-height: 100px;
+  }
+  
+  .select {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  
+  .input[type="checkbox"] {
+    margin-right: 5px;
+  }
+  
+  .linkPreview {
+    margin-top: 10px;
+    font-size: 0.9rem;
+  }
+  
+  .linkPreview a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .linkPreview a:hover {
+    text-decoration: underline;
+  }
+  

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { supabase } from '../../lib/supabaseClient';
+import { supabase } from '../../../lib/supabaseClient';
 import styles from './Signup.module.css';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
@@ -76,7 +76,7 @@ export default function Signup() {
     const userPayload = {
       name,
       email,
-      password,
+      password, // This should ideally be hashed before saving (if you aren't using Supabase Auth)
       address,
       phone,
       is_business_owner: isBusinessOwner,

@@ -2,127 +2,261 @@
 
 import { useState } from 'react';
 import { supabase } from '../../../lib/supabaseClient';
-import { useRouter } from 'next/navigation';
-import bcrypt from 'bcryptjs';
 import styles from './Signup.module.css';
+import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 export default function Signup() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-  });
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [address, setAddress] = useState('');
+  const [phone, setPhone] = useState('');
+  const [isBusinessOwner, setIsBusinessOwner] = useState(false);
+  const [businessName, setBusinessName] = useState('');
+  const [businessAddress, setBusinessAddress] = useState('');
+  const [businessType, setBusinessType] = useState('');
+  const [productService, setProductService] = useState('');
+  const [businessExperience, setBusinessExperience] = useState('');
+  const [businessDescription, setBusinessDescription] = useState('');
+  const [isRegistered, setIsRegistered] = useState(false);
+  const [photo, setPhoto] = useState<File | null>(null);
+  const [photoPreviewUrl, setPhotoPreviewUrl] = useState<string | null>(null);
+  const [statusMessage, setStatusMessage] = useState('');
+  const [category, setCategory] = useState<string>('');
+  const [otherCategory, setOtherCategory] = useState('');
+  const [whatsapp, setWhatsapp] = useState('');
+  const [whatsappLink, setWhatsappLink] = useState<string | null>(null);
+
   const router = useRouter();
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+  const availableCategories = ['Select One', 'Clothing', 'Bakery', 'Flower Shop', 'Finance', 'Retail', 'Hospitality', 'Education', 'Cafe', 'Hangout Spot', 'Service Sector', 'Others'];
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files ? e.target.files[0] : null;
+    if (file) {
+      setPhoto(file);
+      const reader = new FileReader();
+      reader.onloadend = () => setPhotoPreviewUrl(reader.result as string);
+      reader.readAsDataURL(file);
+    }
   };
 
-  const handleSignup = async () => {
-    setErrorMessage(null);
-    setSuccessMessage(null);
+  const handleWhatsappChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.target.value;
+    setWhatsapp(input);
+    if (input.trim()) {
+      const link = `https://wa.me/${input.replace(/\D/g, '')}`;
+      setWhatsappLink(link);
+    } else {
+      setWhatsappLink(null);
+    }
+  };
 
-    const { name, email, password, confirmPassword } = formData;
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-    if (!name || !email || !password || !confirmPassword) {
-      setErrorMessage('All fields are required.');
+    const selectedCategory = category === 'Others' && otherCategory.trim() ? otherCategory : category;
+
+    const { data: existingUser, error: emailCheckError } = await supabase
+      .from('users')
+      .select('email')
+      .eq('email', email)
+      .limit(1);
+
+    if (emailCheckError) {
+      console.error('Error checking email:', emailCheckError);
+    }
+
+    if (existingUser && existingUser.length > 0) {
+      setStatusMessage('Error: This email is already registered.');
       return;
     }
 
-    if (password !== confirmPassword) {
-      setErrorMessage('Passwords do not match.');
+    const userPayload = {
+      name,
+      email,
+      password,
+      address,
+      phone,
+      is_business_owner: isBusinessOwner,
+      business_name: isBusinessOwner ? businessName : null,
+      business_address: isBusinessOwner ? businessAddress : null,
+      business_type: isBusinessOwner ? businessType : null,
+      product_service: isBusinessOwner ? productService : null,
+      business_experience: isBusinessOwner ? businessExperience : null,
+      business_description: isBusinessOwner ? businessDescription : null,
+      is_registered: isBusinessOwner ? isRegistered : null,
+      categories: selectedCategory ? [selectedCategory] : [],
+      whatsapp: whatsappLink,
+    };
+
+    const { error: userError } = await supabase.from('users').insert([userPayload]);
+
+    if (userError) {
+      console.error('Signup error:', userError);
+      setStatusMessage(`Error: ${userError.message}`);
       return;
     }
 
-    try {
-      // Hash the password
-      const saltRounds = 10;
-      const hashedPassword = bcrypt.hashSync(password, saltRounds);
+    setStatusMessage('Signup successful! You can now log in at the login page.');
 
-      // Insert the new user into the Supabase users table
-      const { data, error } = await supabase.from('users').insert([
-        {
-          name,
-          email,
-          password: hashedPassword,
-        },
-      ]);
+    if (photo && isBusinessOwner) {
+      try {
+        const photoPath = `user_photos/user_pic/${email}_${photo.name}`;
 
-      if (error) {
-        throw new Error(error.message);
+        const { error: uploadError } = await supabase.storage
+          .from('user-photos')
+          .upload(photoPath, photo);
+
+        if (uploadError) {
+          console.error('Photo upload error:', uploadError);
+          setStatusMessage(`Error uploading photo: ${uploadError.message}`);
+          return;
+        }
+
+        const { data: { publicUrl } } = supabase
+          .storage
+          .from('user-photos')
+          .getPublicUrl(photoPath);
+
+        if (!publicUrl) {
+          console.error('Error: No public URL returned');
+          setStatusMessage('Error retrieving the photo URL.');
+          return;
+        }
+
+        const { error: updateError } = await supabase
+          .from('users')
+          .update({ photo: publicUrl })
+          .eq('email', email);
+
+        if (updateError) {
+          console.error('Error updating photo URL:', updateError);
+          setStatusMessage(`Error saving photo URL: ${updateError.message}`);
+        } else {
+          setStatusMessage('Sign up successfully! You can now Login.');
+        }
+
+      } catch (err) {
+        console.error('Unexpected error:', err);
+        setStatusMessage('Unexpected error occurred while uploading photo.');
       }
+    }
 
-      setSuccessMessage('Account created successfully!');
-      setTimeout(() => {
-        router.push('/login'); // Redirect to login page after successful signup
-      }, 2000);
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error('Error signing up:', error.message);
-        setErrorMessage(error.message);
-      } else {
-        console.error('Unknown error:', error);
-        setErrorMessage('An unexpected error occurred. Please try again.');
-      }
+    setTimeout(() => {
+      router.push('/login');
+      alert('Sign up successfully! You can now Login.');
+    }, 2000);
+
+    resetFormFields();
+  };
+
+  const resetFormFields = () => {
+    setName('');
+    setEmail('');
+    setPassword('');
+    setAddress('');
+    setPhone('');
+    setIsBusinessOwner(false);
+    setBusinessName('');
+    setBusinessAddress('');
+    setBusinessType('');
+    setProductService('');
+    setBusinessExperience('');
+    setBusinessDescription('');
+    setIsRegistered(false);
+    setPhoto(null);
+    setPhotoPreviewUrl(null);
+    setCategory('');
+    setOtherCategory('');
+    setWhatsapp('');
+    setWhatsappLink(null);
+  };
+
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedCategory = e.target.value;
+    setCategory(selectedCategory);
+    if (selectedCategory === 'Others') {
+      setOtherCategory('');
     }
   };
 
   return (
     <div className={styles.container}>
-      <main className={styles.mainContent}>
-        <h1>Sign Up</h1>
-        <input
-          type="text"
-          name="name"
-          placeholder="Name"
-          value={formData.name}
-          onChange={handleInputChange}
-          className={styles.inputField}
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleInputChange}
-          className={styles.inputField}
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleInputChange}
-          className={styles.inputField}
-        />
-        <input
-          type="password"
-          name="confirmPassword"
-          placeholder="Confirm Password"
-          value={formData.confirmPassword}
-          onChange={handleInputChange}
-          className={styles.inputField}
-        />
-        <button onClick={handleSignup} className={styles.signupButton}>
-          Sign Up
-        </button>
-
-        {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
-        {successMessage && <p className={styles.successMessage}>{successMessage}</p>}
-
-        <div className={styles.linkContainer}>
-          <p>
-            Already have an account? <a href="/login" className={styles.link}>Log In</a>
-          </p>
+      <h1 className={styles.title}>Sign Up</h1>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Name:</label>
+          <input
+            type="text"
+            className={styles.inputField}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
         </div>
-      </main>
+
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Email:</label>
+          <input
+            type="email"
+            className={styles.inputField}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Password:</label>
+          <input
+            type="password"
+            className={styles.inputField}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Address:</label>
+          <input
+            type="text"
+            className={styles.inputField}
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label className={styles.label}>Phone:</label>
+          <input
+            type="tel"
+            className={styles.inputField}
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          />
+        </div>
+
+        <div className={styles.formGroup}>
+          <label className={styles.label}>WhatsApp Number:</label>
+          <input
+            type="text"
+            className={styles.inputField}
+            value={whatsapp}
+            onChange={handleWhatsappChange}
+            placeholder="Enter WhatsApp number"
+          />
+          {whatsappLink && (
+            <p className={styles.linkPreview}>Generated Link: <a href={whatsappLink} target="_blank" rel="noopener noreferrer">{whatsappLink}</a></p>
+          )}
+        </div>
+
+        <button type="submit" className={styles.submitButton}>Sign Up</button>
+
+        {statusMessage && <p className={styles.statusMessage}>{statusMessage}</p>}
+      </form>
     </div>
   );
 }

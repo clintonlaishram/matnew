@@ -105,7 +105,7 @@
 @media (max-width: 768px) {
   .landingTitle {
     font-size: 2.5rem; /* Smaller font size for title */
-    margin-bottom: 20px;
+    margin-bottom: 1px;
   }
 
   .statsContainer {
@@ -125,12 +125,10 @@
     width: 100%; /* Full-width buttons */
     max-width: 300px; /* Limit max width */
   }
-}
-
-/* Positioning slightly above center for mobile */
-@media (max-width: 768px) {
   .wrapper {
     align-items: flex-start; /* Start alignment */
-    padding-top: 100px; /* Gap below header */
+    padding-bottom: 100000; /* Gap below header */
   }
 }
+
+
