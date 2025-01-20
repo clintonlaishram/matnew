@@ -88,7 +88,7 @@ export default function Login() {
             Forgot Password?
           </Link>
           <br /><br />
-          <Link href="/signup" className={styles.link}>
+          <Link href="/login/signup" className={styles.link}>
             Sign Up if you&apos;re a new user
           </Link>
         </div>
