@@ -1,186 +1,267 @@
-/* General Layout */
+/* Container */
 .container {
+  width: 80%;
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-  font-family: Arial, sans-serif;
-  background-color: #000; /* Black background */
-  color: #fff; /* White text */
 }
 
-/* Titles */
+/* Title */
 .title {
-  font-size: 2rem;
-  font-weight: bold;
-  margin-bottom: 20px;
+  font-size: 2.5rem;
   text-align: center;
-  color: #fff;
+  margin-bottom: 20px;
 }
 
-/* Alerts */
-.error {
-  color: #f44336; /* Red for errors */
-  background: rgba(255, 0, 0, 0.1); /* Subtle red background */
-  padding: 10px;
-  border: 1px solid #f44336;
-  border-radius: 5px;
-  margin-bottom: 15px;
+/* Error and Success Messages */
+.error, .success {
+  color: red;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
 }
 
 .success {
-  color: #4caf50; /* Green for success */
-  background: rgba(0, 255, 0, 0.1); /* Subtle green background */
-  padding: 10px;
-  border: 1px solid #4caf50;
-  border-radius: 5px;
-  margin-bottom: 15px;
+  color: green;
 }
 
-/* Form Groups */
+/* Form Group */
 .formGroup {
   margin-bottom: 20px;
 }
 
-.label {
+.formGroup label {
+  font-size: 1.2rem;
+  color: #ddd;
   display: block;
-  font-weight: bold;
   margin-bottom: 5px;
-  color: #fff; /* White text for labels */
 }
 
-.input,
-.textarea,
-.fileInput {
+.input, .textarea, .fileInput {
   width: 100%;
   padding: 10px;
-  font-size: 1rem;
-  border: 1px solid #444; /* Dark border */
+  border: 1px solid #444;
+  background-color: #222;
+  color: white;
   border-radius: 5px;
-  background-color: #222; /* Dark background for inputs */
-  color: #fff; /* White text */
 }
 
 .textarea {
-  height: 100px;
   resize: vertical;
+  min-height: 100px;
 }
 
 .fileInput {
-  padding: 5px;
+  border: none;
+  padding: 10px;
+  background-color: #222;
+  color: white;
 }
 
-/* Buttons */
-.uploadButton,
-.saveButton,
-.editButton,
-.cancelButton {
-  padding: 10px 15px;
+.input:focus, .textarea:focus {
+  outline: none;
+  border-color: #66afe9;
+}
+
+/* Previews */
+.previews {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.preview {
+  background-color: #333;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.thumbnail {
+  max-width: 100px;
+  max-height: 100px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+/* Upload Button */
+.uploadButton, .saveButton, .cancelButton, .editButton {
+  padding: 10px 20px;
+  background-color: #444;
+  color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 1rem;
+  transition: background-color 0.3s;
 }
 
-.uploadButton {
-  background-color: #1e88e5; /* Blue button */
-  color: #fff;
+.uploadButton:disabled {
+  background-color: #666;
+  cursor: not-allowed;
 }
 
-.uploadButton:hover {
-  background-color: #1565c0; /* Darker blue on hover */
+.uploadButton:hover, .saveButton:hover, .cancelButton:hover, .editButton:hover {
+  background-color: #555;
 }
 
-.saveButton {
-  background-color: #4caf50; /* Green button */
-  color: #fff;
+/* Product List */
+.productListTitle {
+  font-size: 2rem;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
-.saveButton:hover {
-  background-color: #45a049; /* Darker green on hover */
-}
-
-.cancelButton {
-  background-color: #f44336; /* Red button */
-  color: #fff;
-  margin-top: 10px;
-}
-
-.cancelButton:hover {
-  background-color: #d32f2f; /* Darker red on hover */
-}
-
-.editButton {
-  background-color: #ff9800; /* Orange button */
-  color: #fff;
-}
-
-.editButton:hover {
-  background-color: #f57c00; /* Darker orange on hover */
-}
-
-/* Product Grid */
-.productGrid {
+.productList {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
-  margin-top: 20px;
 }
 
 .productCard {
-  padding: 15px;
-  border: 1px solid #444;
-  border-radius: 5px;
-  background-color: #111; /* Darker background for product cards */
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  background-color: #222;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
-/* Edit Form */
-.editForm {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+.productCard h3 {
+  font-size: 1.5rem;
+  color: #ddd;
 }
 
-/* Media Previews */
-.previewContainer {
+.productCard p {
+  color: #bbb;
+}
+
+.productCard .thumbnailList {
   display: flex;
   gap: 10px;
-  flex-wrap: wrap;
   margin-top: 10px;
 }
 
-.previewItem {
-  width: 80px;
-  height: 80px;
-  border: 1px solid #444; /* Dark border */
+.productCard .thumbnail {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
   border-radius: 5px;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #222; /* Dark background */
 }
 
-.previewImage {
+/* Edit Modal Styles */
+.editModalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* Product Media */
-.mediaContainer {
+.editModal {
+  background-color: #333;
+  padding: 30px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.editModal h3 {
+  color: white;
+  margin-bottom: 20px;
+}
+
+.editModal .formGroup {
+  margin-bottom: 20px;
+}
+
+.editModal .formGroup label {
+  color: #ccc;
+}
+
+.editModal .input, .editModal .textarea {
+  background-color: #222;
+  border-color: #444;
+}
+
+.editModal .previews {
   display: flex;
   gap: 10px;
-  flex-wrap: wrap;
   margin-top: 10px;
 }
 
-.media {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border: 1px solid #444; /* Dark border for media */
+.editModal .preview {
+  background-color: #444;
+  padding: 10px;
   border-radius: 5px;
+}
+
+.editModal .saveButton {
+  background-color: #28a745;
+}
+
+.editModal .saveButton:hover {
+  background-color: #218838;
+}
+
+.editModal .cancelButton {
+  background-color: #dc3545;
+}
+
+.editModal .cancelButton:hover {
+  background-color: #c82333;
+}
+
+/* Additional styling for editing media previews */
+.editModal .preview img {
+  max-width: 80px;
+  max-height: 80px;
+  object-fit: cover;
+}
+
+.editModal .preview.new {
+  background-color: #444;
+  padding: 10px;
+  border-radius: 5px;
+  color: #ccc;
+}
+
+/* Remove global selector */
+.body {
+  background-color: black;
+  color: white;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+}
+
+.h1, .h2, .h3 {
+  color: white;
+}
+
+.error, .success {
+  color: red;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.success {
+  color: green;
+}
+
+/* Remove universal selector * and style each class instead */
+/* Button Styles */
+.deleteButton {
+  padding: 10px 20px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.deleteButton:hover {
+  background-color: #c82333;
 }

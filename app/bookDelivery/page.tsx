@@ -12,6 +12,7 @@ import { useUserDetails } from '../../components/UserDetailsFetcher';
 import { calculateDeliveryCharge } from '../../components/DistanceUtils';
 import { supabase } from '../../lib/supabaseClient';
 import styles from './styles/page.module.css';
+import Link from 'next/link'; // Import Link from Next.js
 
 const libraries: ['places'] = ['places'];
 const containerStyle = { width: '100%', height: '400px' };
@@ -232,6 +233,20 @@ export default function DistanceCalculatorPage() {
             Confirm Booking
           </button>
         </div>
+        <br/><br/><br/>
+        <div className={styles.cen}>
+            For Delivery rates in PDF, click the links below
+        </div><br/>
+
+      <div></div>
+        <div>
+        <Link href="/standard.pdf" className={styles.links}>Standard delivery rates.</Link>
+      </div>
+      <div></div>
+      <div>
+        <Link href="/instant.pdf" className={styles.links}>Instant delivery rates Outside Imphal.</Link>
+      </div>
+      <div></div>
       </div>
     </LoadScript>
   );

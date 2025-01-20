@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { supabase } from '../../lib/supabaseClient';
+import { supabase } from '../../../lib/supabaseClient';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import bcrypt from 'bcryptjs'; // Import bcryptjs
 import styles from './Login.module.css';
 
 export default function Login() {
@@ -16,26 +17,35 @@ export default function Login() {
     setErrorMessage(null);
 
     try {
+      // Fetch user record by email
       const { data: users, error } = await supabase
         .from('users')
-        .select('user_id, name, email, address, phone')
+        .select('user_id, name, email, password, address, phone')
         .eq('email', email)
-        .eq('password', password);
+        .limit(1);
 
       if (error) throw new Error(error.message);
 
       if (users && users.length > 0) {
         const user = users[0];
 
-        // Store the entire user object, including address and phone
-        sessionStorage.setItem('user', JSON.stringify(user));
+        // Compare provided password with stored hashed password
+        const isPasswordValid = await bcrypt.compare(password, user.password);
 
-        alert('Login successful!');
+        if (isPasswordValid) {
+          // Store the entire user object, excluding the password
+          const { password, ...userWithoutPassword } = user;
+          sessionStorage.setItem('user', JSON.stringify(userWithoutPassword));
 
-        // Emit a custom event to notify Header about login
-        window.dispatchEvent(new Event('loginStatusChange'));
+          alert('Login successful!');
 
-        router.push('/discover');
+          // Emit a custom event to notify Header about login
+          window.dispatchEvent(new Event('loginStatusChange'));
+
+          router.push('/discover');
+        } else {
+          setErrorMessage('Invalid email or password');
+        }
       } else {
         setErrorMessage('Invalid email or password');
       }
@@ -50,7 +60,6 @@ export default function Login() {
     }
   };
 
-  // Handle key press for Enter to trigger login
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       handleLogin();
@@ -66,7 +75,7 @@ export default function Login() {
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          onKeyDown={handleKeyDown}  // Trigger login on Enter key
+          onKeyDown={handleKeyDown} // Trigger login on Enter
           className={styles.inputField}
         />
         <input
@@ -74,7 +83,7 @@ export default function Login() {
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          onKeyDown={handleKeyDown}  // Trigger login on Enter key
+          onKeyDown={handleKeyDown} // Trigger login on Enter
           className={styles.inputField}
         />
         <button onClick={handleLogin} className={styles.loginButton}>
@@ -88,7 +97,7 @@ export default function Login() {
             Forgot Password?
           </Link>
           <br /><br />
-          <Link href="/signup" className={styles.link}>
+          <Link href="/login/signup" className={styles.link}>
             Sign Up if you&apos;re a new user
           </Link>
         </div>

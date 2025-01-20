@@ -17,7 +17,7 @@ interface Product {
 
 // Async function to fetch product details
 async function fetchProduct(id: string) {
-  const { data, error } = await supabase.from('products').select('*').eq('id', id).single();
+  const { data, error } = await supabase.from('new_products').select('*').eq('id', id).single();
   if (error) {
     throw new Error(error.message); // Let errors propagate to the error boundary
   }

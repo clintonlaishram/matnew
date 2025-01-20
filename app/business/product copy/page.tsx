@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../../../lib/supabaseClient';
 import styles from './ProductUploadPage.module.css';
 
+
 interface User {
   user_id: string;
   email: string;
@@ -13,7 +14,7 @@ interface User {
 
 interface Product {
   id: number;
-  name: string;
+  name: string;  
   description: string;
   price_inr: number;
   media_urls: string[];
@@ -37,6 +38,7 @@ export default function ProductUploadPage() {
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
+  // Fetch user and products
   useEffect(() => {
     const fetchUser = async () => {
       const sessionUser = JSON.parse(sessionStorage.getItem('user') || '{}');
@@ -63,7 +65,7 @@ export default function ProductUploadPage() {
 
   const fetchProducts = async (userId: string) => {
     const { data: productsData, error: productsError } = await supabase
-      .from('new_products')
+      .from('products')
       .select('*')
       .eq('user_id', userId);
 
@@ -74,36 +76,6 @@ export default function ProductUploadPage() {
     }
   };
 
-
-  const handleDelete = async (productId: number) => {
-    if (!user) {
-      setError('User information is missing. Please log in again.');
-      return;
-    }
-  
-    const confirmDelete = window.confirm('Are you sure you want to delete this product?');
-    if (!confirmDelete) return;
-  
-    setError(null);
-    setSuccessMessage(null);
-  
-    try {
-      // Delete the product from the database
-      const { error: deleteError } = await supabase
-        .from('new_products')
-        .delete()
-        .eq('id', productId)
-        .eq('user_id', user.user_id);
-  
-      if (deleteError) throw new Error('Failed to delete product.');
-  
-      setSuccessMessage('Product deleted successfully!');
-      fetchProducts(user.user_id); // Re-fetch products after deletion
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unknown error occurred.');
-    }
-  };
-  
   const handleMediaChange = (e: React.ChangeEvent<HTMLInputElement>, isEdit = false) => {
     if (e.target.files) {
       const files = Array.from(e.target.files);
@@ -114,7 +86,7 @@ export default function ProductUploadPage() {
         setEditMediaPreviews(previews);
       } else {
         setProductMedia(files);
-        const previews = files.map(() => ({ url: '', loading: true }));
+        const previews = files.map((file) => ({ url: '', loading: true }));
         setMediaPreviews(previews);
 
         files.forEach((file, index) => {
@@ -130,28 +102,6 @@ export default function ProductUploadPage() {
         });
       }
     }
-  };
-
-  const uploadMediaFiles = async (files: File[], userId: string) => {
-    const mediaUrls: string[] = [];
-
-    for (const file of files) {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${userId}_${Date.now()}.${fileExt}`;
-      const { data, error } = await supabase.storage
-        .from('product-media')
-        .upload(`media/${fileName}`, file);
-
-      if (error) throw new Error('Error uploading media files.');
-
-      const { publicUrl } = supabase.storage
-        .from('product-media')
-        .getPublicUrl(`media/${fileName}`).data;
-
-      if (publicUrl) mediaUrls.push(publicUrl);
-    }
-
-    return mediaUrls;
   };
 
   const handleUpload = async () => {
@@ -170,10 +120,26 @@ export default function ProductUploadPage() {
     setSuccessMessage(null);
 
     try {
-      const mediaUrls = await uploadMediaFiles(productMedia, user.user_id);
+      const mediaUrls: string[] = [];
+
+      for (const file of productMedia) {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${user.user_id}_${Date.now()}.${fileExt}`;
+        const { data, error } = await supabase.storage
+          .from('product-media')
+          .upload(`media/${fileName}`, file);
+
+        if (error) throw new Error('Error uploading media files.');
+
+        const { publicUrl } = supabase.storage
+          .from('product-media')
+          .getPublicUrl(`media/${fileName}`).data;
+
+        if (publicUrl) mediaUrls.push(publicUrl);
+      }
 
       const { error: dbError } = await supabase
-        .from('new_products')
+        .from('products')
         .insert({
           user_id: user.user_id,
           name: productName,
@@ -190,7 +156,7 @@ export default function ProductUploadPage() {
       setProductPrice('');
       setProductMedia([]);
       setMediaPreviews([]);
-      fetchProducts(user.user_id);
+      fetchProducts(user.user_id); // Refresh products
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred.');
     } finally {
@@ -221,35 +187,56 @@ export default function ProductUploadPage() {
       setError('All fields are required.');
       return;
     }
-
+  
     setError(null);
     setSuccessMessage(null);
-
+  
     try {
-      const mediaUrls = updatedMedia.length > 0
-        ? await uploadMediaFiles(updatedMedia, user?.user_id || '')
-        : editMediaPreviews;
-
+      const mediaUrls: string[] = [];
+  
+      // If new media is uploaded, replace old media URLs
+      if (updatedMedia.length > 0) {
+        for (const file of updatedMedia) {
+          const fileExt = file.name.split('.').pop();
+          const fileName = `${user?.user_id}_${Date.now()}.${fileExt}`;
+          const { data, error } = await supabase.storage
+            .from('product-media')
+            .upload(`media/${fileName}`, file);
+  
+          if (error) throw new Error('Error uploading media files.');
+  
+          const { publicUrl } = supabase.storage
+            .from('product-media')
+            .getPublicUrl(`media/${fileName}`).data;
+  
+          if (publicUrl) mediaUrls.push(publicUrl);
+        }
+      } else {
+        // Retain the existing media URLs if no new media is uploaded
+        mediaUrls.push(...editMediaPreviews);
+      }
+  
+      // Update the product with the updated media URLs
       const { error: updateError } = await supabase
-        .from('new_products')
+        .from('products')
         .update({
           name: updatedName,
           description: updatedDescription,
           price_inr: parseFloat(updatedPrice),
-          media_urls: mediaUrls,
+          media_urls: mediaUrls, // Replace old media URLs
         })
         .eq('id', editingProductId);
-
+  
       if (updateError) throw new Error('Failed to update product.');
-
+  
       setSuccessMessage('Product updated successfully!');
       handleCancelEdit();
-      fetchProducts(user?.user_id || '');
+      fetchProducts(user?.user_id || ''); // Refresh the product list
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred.');
     }
   };
-
+  
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Upload Product</h1>
@@ -258,7 +245,6 @@ export default function ProductUploadPage() {
       {successMessage && <p className={styles.success}>{successMessage}</p>}
 
       <div>
-        {/* Upload Form */}
         <div className={styles.formGroup}>
           <label htmlFor="productName">Product Name</label>
           <input
@@ -277,14 +263,14 @@ export default function ProductUploadPage() {
             value={productDescription}
             onChange={(e) => setProductDescription(e.target.value)}
             className={styles.textarea}
-          />
+          ></textarea>
         </div>
 
         <div className={styles.formGroup}>
           <label htmlFor="productPrice">Product Price (INR)</label>
           <input
             id="productPrice"
-            type="number"
+            type="text"
             value={productPrice}
             onChange={(e) => setProductPrice(e.target.value)}
             className={styles.input}
@@ -292,126 +278,110 @@ export default function ProductUploadPage() {
         </div>
 
         <div className={styles.formGroup}>
-          <label htmlFor="productMedia">Product Images/Videos</label>
+          <label htmlFor="productMedia">Upload Media</label>
           <input
             id="productMedia"
             type="file"
-            accept="image/*,video/*"
             multiple
-            onChange={handleMediaChange}
+            accept="image/*,video/*"
+            onChange={(e) => handleMediaChange(e)}
             className={styles.fileInput}
           />
-          <div className={styles.previews}>
+          <div className={styles.previewContainer}>
             {mediaPreviews.map((preview, index) => (
-              <div key={index} className={styles.preview}>
+              <div key={index} className={styles.previewItem}>
                 {preview.loading ? (
-                  <div>Loading...</div>
+                  <p>Loading...</p>
                 ) : (
-                  <img src={preview.url} alt={`Preview ${index}`} className={styles.thumbnail} />
+                  <img src={preview.url} alt={`Preview ${index + 1}`} className={styles.previewImage} />
                 )}
               </div>
             ))}
           </div>
         </div>
 
-        <button onClick={handleUpload} disabled={uploading} className={styles.uploadButton}>
+        <button
+          onClick={handleUpload}
+          disabled={uploading}
+          className={styles.uploadButton}
+        >
           {uploading ? 'Uploading...' : 'Upload Product'}
         </button>
       </div>
 
-      <h2 className={styles.productListTitle}>Your Products</h2>
-      <div className={styles.productList}>
+      <h1 className={styles.title}>Your Products</h1>
+      <div className={styles.productGrid}>
         {products.map((product) => (
           <div key={product.id} className={styles.productCard}>
-            <h3>{product.name}</h3>
-            <p>{product.description}</p>
-            <p>Price: ₹{product.price_inr}</p>
-            <div className={styles.thumbnailList}>
-              {product.media_urls.slice(0, 3).map((url, index) => (
-                <img key={index} src={url} alt={`Product ${product.id}`} className={styles.thumbnail} />
-              ))}
-            </div>
-            <div>
-              <button onClick={() => handleEdit(product)} className={styles.editButton}>
-                Edit
-              </button>
-              <button onClick={() => handleDelete(product.id)} className={styles.deleteButton}>
-                Delete
-              </button>
-            </div>
+            {editingProductId === product.id ? (
+              <div className={styles.editForm}>
+                <h3>Edit Product</h3>
+                <div className={styles.formGroup}>
+                  <label>Product Name</label>
+                  <input
+                    type="text"
+                    value={updatedName}
+                    onChange={(e) => setUpdatedName(e.target.value)}
+                    className={styles.input}
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label>Description</label>
+                  <textarea
+                    value={updatedDescription}
+                    onChange={(e) => setUpdatedDescription(e.target.value)}
+                    className={styles.textarea}
+                  ></textarea>
+                </div>
+                <div className={styles.formGroup}>
+                  <label>Price (INR)</label>
+                  <input
+                    type="text"
+                    value={updatedPrice}
+                    onChange={(e) => setUpdatedPrice(e.target.value)}
+                    className={styles.input}
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label>Media</label>
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/*,video/*"
+                    onChange={(e) => handleMediaChange(e, true)}
+                    className={styles.fileInput}
+                  />
+                  <div className={styles.previewContainer}>
+                    {editMediaPreviews.map((url, index) => (
+                      <img key={index} src={url} alt={`Preview ${index}`} className={styles.previewImage} />
+                    ))}
+                  </div>
+                </div>
+                <button onClick={handleSaveChanges} className={styles.saveButton}>
+                  Save Changes
+                </button>
+                <button onClick={handleCancelEdit} className={styles.cancelButton}>
+                  Cancel
+                </button>
+              </div>
+            ) : (
+              <>
+                <h2>{product.name}</h2>
+                <p>{product.description}</p>
+                <p>Price: ₹{product.price_inr}</p>
+                <div className={styles.mediaContainer}>
+                  {product.media_urls.map((url, index) => (
+                    <img key={index} src={url} alt={`Media ${index}`} className={styles.media} />
+                  ))}
+                </div>
+                <button onClick={() => handleEdit(product)} className={styles.editButton}>
+                  Edit
+                </button>
+              </>
+            )}
           </div>
         ))}
       </div>
-
-
-      {/* Edit Modal */}
-      {editingProductId && (
-        <div className={styles.editModalOverlay}>
-          <div className={styles.editModal}>
-            <h3>Edit Product</h3>
-            <div className={styles.formGroup}>
-              <label htmlFor="updatedName">Product Name</label>
-              <input
-                id="updatedName"
-                type="text"
-                value={updatedName}
-                onChange={(e) => setUpdatedName(e.target.value)}
-                className={styles.input}
-              />
-            </div>
-
-            <div className={styles.formGroup}>
-              <label htmlFor="updatedDescription">Product Description</label>
-              <textarea
-                id="updatedDescription"
-                value={updatedDescription}
-                onChange={(e) => setUpdatedDescription(e.target.value)}
-                className={styles.textarea}
-              />
-            </div>
-
-            <div className={styles.formGroup}>
-              <label htmlFor="updatedPrice">Product Price (INR)</label>
-              <input
-                id="updatedPrice"
-                type="number"
-                value={updatedPrice}
-                onChange={(e) => setUpdatedPrice(e.target.value)}
-                className={styles.input}
-              />
-            </div>
-
-            <div className={styles.formGroup}>
-              <label htmlFor="updatedMedia">Update Images/Videos</label>
-              <input
-                id="updatedMedia"
-                type="file"
-                accept="image/*,video/*"
-                multiple
-                onChange={(e) => handleMediaChange(e, true)}
-                className={styles.fileInput}
-              />
-              <div className={styles.previews}>
-                {editMediaPreviews.map((url, index) => (
-                  <div key={index} className={styles.preview}>
-                    <img
-                      src={url}
-                      alt={`Edit Preview ${index}`}
-                      className={styles.thumbnail}
-                    />
-                  </div>
-                ))}
-                {updatedMedia.map((file, index) => (
-                  <div key={index} className={styles.preview}>New</div>
-                ))}
-              </div>
-            </div>
-
-            <button onClick={handleSaveChanges} className={styles.saveButton}>Save Changes</button>
-            <button onClick={handleCancelEdit} className={styles.cancelButton}>Cancel</button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

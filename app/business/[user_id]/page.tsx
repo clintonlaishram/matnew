@@ -52,7 +52,7 @@ export default function BusinessPage() {
         setBusiness(businessData);
 
         const { data: productsData, error: productsError } = await supabase
-          .from('products')
+          .from('new_products')
           .select('*')
           .eq('user_id', params.user_id);
 

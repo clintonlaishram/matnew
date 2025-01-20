@@ -74,36 +74,6 @@ export default function ProductUploadPage() {
     }
   };
 
-
-  const handleDelete = async (productId: number) => {
-    if (!user) {
-      setError('User information is missing. Please log in again.');
-      return;
-    }
-  
-    const confirmDelete = window.confirm('Are you sure you want to delete this product?');
-    if (!confirmDelete) return;
-  
-    setError(null);
-    setSuccessMessage(null);
-  
-    try {
-      // Delete the product from the database
-      const { error: deleteError } = await supabase
-        .from('new_products')
-        .delete()
-        .eq('id', productId)
-        .eq('user_id', user.user_id);
-  
-      if (deleteError) throw new Error('Failed to delete product.');
-  
-      setSuccessMessage('Product deleted successfully!');
-      fetchProducts(user.user_id); // Re-fetch products after deletion
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unknown error occurred.');
-    }
-  };
-  
   const handleMediaChange = (e: React.ChangeEvent<HTMLInputElement>, isEdit = false) => {
     if (e.target.files) {
       const files = Array.from(e.target.files);
@@ -335,14 +305,10 @@ export default function ProductUploadPage() {
               <button onClick={() => handleEdit(product)} className={styles.editButton}>
                 Edit
               </button>
-              <button onClick={() => handleDelete(product.id)} className={styles.deleteButton}>
-                Delete
-              </button>
             </div>
           </div>
         ))}
       </div>
-
 
       {/* Edit Modal */}
       {editingProductId && (

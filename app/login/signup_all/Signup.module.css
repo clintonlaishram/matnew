@@ -7,8 +7,6 @@
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  background-color: #000000; /* Black background */
-  color: #ffffff; /* White text for readability */
 }
 
 /* Title */
@@ -22,8 +20,8 @@
 /* Form */
 .form {
   width: 100%;
-  background-color: #333333; /* Dark grey background for form */
-  color: #ffffff; /* White text */
+  background-color: #000000;
+  color: #ffffff;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -35,39 +33,44 @@
 }
 
 /* Labels */
-.label, .label1 {
+.label {
   font-size: 1rem;
   font-weight: 600;
   margin-bottom: 5px;
-  color: #ffffff; /* White text for labels */
+  color: #ffffff;
 }
-
 .label1 {
-  font-weight: 900; /* Bold for important labels */
+  font-size: 1rem;
+  font-weight: 900;
+  margin-bottom: 5px;
+  color: #005d20;
 }
-
 /* Input Fields */
 .inputField {
   width: 100%;
   padding: 10px;
   font-size: 1rem;
-  color: #ffffff; /* White text for input fields */
-  background-color: #222222; /* Dark background for inputs */
-  border: 1px solid #444444; /* Dark border for input fields */
+  border: 1px solid #ccc;
   border-radius: 5px;
   box-sizing: border-box;
-  transition: border-color 0.3s ease;
+  transition: border-color 0.3s;
 }
 
 .inputField:focus {
-  border-color: #4a90e2; /* Blue border when focused */
+  border-color: #4a90e2;
   outline: none;
 }
 
 /* Checkbox & Radio buttons */
+/* Checkbox & Radio buttons */
 .formGroup input[type="checkbox"],
 .formGroup input[type="radio"] {
-  transform: scale(1.5); /* Larger checkboxes and radios */
+  transform: scale(1.5); /* Adjust the number to make it bigger or smaller */
+  margin-right: 10px;
+}
+
+
+.formGroup input[type="radio"] {
   margin-right: 10px;
 }
 
@@ -75,8 +78,8 @@
 .submitButton {
   width: 100%;
   padding: 12px;
-  background-color: #025200; /* Green background */
-  color: rgb(255, 255, 255); /* White text */
+  background-color: #025200;
+  color: rgb(255, 255, 255);
   font-weight: bold;
   font-size: 1.1rem;
   border: none;
@@ -86,14 +89,13 @@
 }
 
 .submitButton:hover {
-  background-color: #027f3d; /* Lighter green on hover */
+  background-color: #027f3d;
 }
 
 /* File Upload */
 .input[type="file"] {
   margin-top: 10px;
   padding: 5px;
-  color: #ffffff;
 }
 
 /* Image Preview */
@@ -107,7 +109,7 @@
 /* Status Message */
 .statusMessage {
   font-size: 1rem;
-  color: #d9534f; /* Red color for error or status messages */
+  color: #d9534f;
   margin-top: 20px;
 }
 
@@ -116,27 +118,18 @@
   width: 100%;
   padding: 10px;
   font-size: 1rem;
-  border: 1px solid #444444; /* Dark border for select */
+  border: 1px solid #ccc;
   border-radius: 5px;
-  background-color: #333333; /* Dark background for dropdown */
-  color: #ffffff; /* White text */
-  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+  background-color: white;
+  color: #333;
+  transition: border-color 0.3s;
 }
 
 .selectCategory:focus {
-  border-color: #01681a; /* Greenish border on focus */
+  border-color: #01681a;
+  color: #ffffff;
   outline: none;
-}
-
-/* Link Preview */
-.linkPreview {
-  color: #4a90e2;
-  margin-top: 10px;
-}
-
-.linkPreview a {
-  color: #4a90e2;
-  text-decoration: none;
 }
 
 /* Form Group: Input Alignment */
@@ -169,7 +162,6 @@
     font-size: 1rem;
   }
 }
-
 .div1 {
   margin-bottom: 40px; /* Adds space below div1 */
 }

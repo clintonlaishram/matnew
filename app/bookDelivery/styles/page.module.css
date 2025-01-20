@@ -145,3 +145,33 @@
     margin: 0;
   }
 }
+/* styles.css or equivalent */
+
+.links {
+  color: #28a745; /* Green color for the link */
+  text-decoration: none; /* Remove underline */
+  font-weight: bold; /* Make text bold */
+  font-size: 16px; /* Adjust font size */
+  text-align: center; /* Center-align text */
+  display: block; /* Makes the link a block-level element for centering */
+  margin: 0 auto; /* Centers the link horizontally */
+  width: fit-content; /* Ensures the width of the link is based on its content */
+  transition: color 0.3s ease, text-decoration 0.3s ease; /* Smooth transition effect */
+}
+
+.links:hover {
+  color: #218838; /* Darker green on hover */
+  text-decoration: underline; /* Underline on hover */
+}
+
+.links:focus {
+  outline: 2px solid #218838; /* Outline for focus (a11y) */
+}
+
+.links:active {
+  color: #1c7430; /* Even darker green on click */
+}
+.cen {
+  text-align: center;
+  font-weight: bold;
+}

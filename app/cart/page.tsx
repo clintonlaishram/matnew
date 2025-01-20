@@ -27,13 +27,13 @@ const CartPage: React.FC = () => {
             {cart.map((item) => (
               <li
                 key={item.id}
-                className="flex justify-between items-center bg-black-100 p-4 rounded shadow"
+                className="flex justify-between items-center bg-white-100 p-4 rounded shadow"
               >
                 <div>
-                  <h2 className="font-semibold">{item.name}</h2>
-                  <p>Price: {item.price ? `$${item.price}` : 'N/A'}</p>
-                  <p>Quantity: {item.qty}</p>
-                  <p>
+                  <h2 className="font-semibold  text-white py-1 px-3">{item.name}</h2>
+                  <p className="font-semibold  text-white py-1 px-2">Price: {item.price ? `$${item.price}` : 'N/A'}</p>
+                  <p  className="font-semibold  text-white py-1 px-2">Quantity: {item.qty}</p>
+                  <p className="font-semibold  text-white py-1 px-2">
                     Total:{' '}
                     {item.price
                       ? `$${(parseFloat(item.price) * item.qty).toFixed(2)}`
@@ -59,8 +59,8 @@ const CartPage: React.FC = () => {
               </li>
             ))}
           </ul>
-          <div className="flex justify-between items-center mb-5">
-            <h2 className="text-xl font-bold">
+          <div className="flex justify-between items-center mb-5 ">
+            <h2 className="text-xl font-bold text-white">
               Total Price: ${totalPrice.toFixed(2)}
             </h2>
             <div className="flex space-x-4">

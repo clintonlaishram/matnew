@@ -38,7 +38,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const fetchProductDetails = async (id: number) => {
     const { data, error } = await supabase
-      .from('products')
+      .from('new_products')
       .select('name, price_inr')
       .eq('id', id)
       .single();

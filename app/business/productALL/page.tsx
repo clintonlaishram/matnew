@@ -74,36 +74,6 @@ export default function ProductUploadPage() {
     }
   };
 
-
-  const handleDelete = async (productId: number) => {
-    if (!user) {
-      setError('User information is missing. Please log in again.');
-      return;
-    }
-  
-    const confirmDelete = window.confirm('Are you sure you want to delete this product?');
-    if (!confirmDelete) return;
-  
-    setError(null);
-    setSuccessMessage(null);
-  
-    try {
-      // Delete the product from the database
-      const { error: deleteError } = await supabase
-        .from('new_products')
-        .delete()
-        .eq('id', productId)
-        .eq('user_id', user.user_id);
-  
-      if (deleteError) throw new Error('Failed to delete product.');
-  
-      setSuccessMessage('Product deleted successfully!');
-      fetchProducts(user.user_id); // Re-fetch products after deletion
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unknown error occurred.');
-    }
-  };
-  
   const handleMediaChange = (e: React.ChangeEvent<HTMLInputElement>, isEdit = false) => {
     if (e.target.files) {
       const files = Array.from(e.target.files);
@@ -258,7 +228,6 @@ export default function ProductUploadPage() {
       {successMessage && <p className={styles.success}>{successMessage}</p>}
 
       <div>
-        {/* Upload Form */}
         <div className={styles.formGroup}>
           <label htmlFor="productName">Product Name</label>
           <input
@@ -292,11 +261,11 @@ export default function ProductUploadPage() {
         </div>
 
         <div className={styles.formGroup}>
-          <label htmlFor="productMedia">Product Images/Videos</label>
+          <label htmlFor="productMedia">Upload Images and Videos</label>
           <input
             id="productMedia"
             type="file"
-            accept="image/*,video/*"
+            accept="image/*,video/*" // Allow images and videos
             multiple
             onChange={handleMediaChange}
             className={styles.fileInput}
@@ -332,84 +301,77 @@ export default function ProductUploadPage() {
               ))}
             </div>
             <div>
-              <button onClick={() => handleEdit(product)} className={styles.editButton}>
-                Edit
-              </button>
-              <button onClick={() => handleDelete(product.id)} className={styles.deleteButton}>
-                Delete
-              </button>
+              <button onClick={() => handleEdit(product)} className={styles.editButton}>Edit</button>
             </div>
           </div>
         ))}
       </div>
 
-
       {/* Edit Modal */}
       {editingProductId && (
-        <div className={styles.editModalOverlay}>
-          <div className={styles.editModal}>
-            <h3>Edit Product</h3>
-            <div className={styles.formGroup}>
-              <label htmlFor="updatedName">Product Name</label>
-              <input
-                id="updatedName"
-                type="text"
-                value={updatedName}
-                onChange={(e) => setUpdatedName(e.target.value)}
-                className={styles.input}
-              />
-            </div>
-
-            <div className={styles.formGroup}>
-              <label htmlFor="updatedDescription">Product Description</label>
-              <textarea
-                id="updatedDescription"
-                value={updatedDescription}
-                onChange={(e) => setUpdatedDescription(e.target.value)}
-                className={styles.textarea}
-              />
-            </div>
-
-            <div className={styles.formGroup}>
-              <label htmlFor="updatedPrice">Product Price (INR)</label>
-              <input
-                id="updatedPrice"
-                type="number"
-                value={updatedPrice}
-                onChange={(e) => setUpdatedPrice(e.target.value)}
-                className={styles.input}
-              />
-            </div>
-
-            <div className={styles.formGroup}>
-              <label htmlFor="updatedMedia">Update Images/Videos</label>
-              <input
-                id="updatedMedia"
-                type="file"
-                accept="image/*,video/*"
-                multiple
-                onChange={(e) => handleMediaChange(e, true)}
-                className={styles.fileInput}
-              />
-              <div className={styles.previews}>
-                {editMediaPreviews.map((url, index) => (
-                  <div key={index} className={styles.preview}>
-                    <img
-                      src={url}
-                      alt={`Edit Preview ${index}`}
-                      className={styles.thumbnail}
-                    />
-                  </div>
-                ))}
-                {updatedMedia.map((file, index) => (
-                  <div key={index} className={styles.preview}>New</div>
-                ))}
-              </div>
-            </div>
-
-            <button onClick={handleSaveChanges} className={styles.saveButton}>Save Changes</button>
-            <button onClick={handleCancelEdit} className={styles.cancelButton}>Cancel</button>
+        <div className={styles.editModal}>
+          <h3>Edit Product</h3>
+          <div className={styles.formGroup}>
+            <label htmlFor="updatedName">Product Name</label>
+            <input
+              id="updatedName"
+              type="text"
+              value={updatedName}
+              onChange={(e) => setUpdatedName(e.target.value)}
+              className={styles.input}
+            />
           </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="updatedDescription">Product Description</label>
+            <textarea
+              id="updatedDescription"
+              value={updatedDescription}
+              onChange={(e) => setUpdatedDescription(e.target.value)}
+              className={styles.textarea}
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="updatedPrice">Product Price (INR)</label>
+            <input
+              id="updatedPrice"
+              type="number"
+              value={updatedPrice}
+              onChange={(e) => setUpdatedPrice(e.target.value)}
+              className={styles.input}
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="updatedMedia">Update Images/Videos</label>
+            <input
+              id="updatedMedia"
+              type="file"
+              accept="image/*,video/*" // Allow images and videos
+              multiple
+              onChange={(e) => handleMediaChange(e, true)}
+              className={styles.fileInput}
+            />
+            <div className={styles.previews}>
+              {editMediaPreviews.map((url, index) => (
+                <div key={index} className={styles.preview}>
+                  <img
+                    key={index}
+                    src={url}
+                    alt={`Edit Preview ${index}`}
+                    className={styles.thumbnail}
+                  />
+                </div>
+              ))}
+              {updatedMedia.map((file, index) => (
+                <div key={index} className={styles.preview}>New</div>
+              ))}
+            </div>
+          </div>
+
+          <button onClick={handleSaveChanges} className={styles.saveButton}>Save Changes</button>
+          <button onClick={handleCancelEdit} className={styles.cancelButton}>Cancel</button>
         </div>
       )}
     </div>

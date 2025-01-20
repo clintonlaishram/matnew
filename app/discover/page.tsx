@@ -55,7 +55,7 @@ export default function Discover() {
 
     const fetchAllProducts = async () => {
       try {
-        const { data, error } = await supabase.from('products').select('*');
+        const { data, error } = await supabase.from('new_products').select('*');
         if (error) {
           throw new Error(error.message);
         }
