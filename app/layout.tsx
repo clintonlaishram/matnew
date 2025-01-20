@@ -15,10 +15,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <CartProvider>
               <ConditionalHeader />
               <main className="flex-1">{children}</main>
-              <Footer />
             </CartProvider>
           </TeamAuthProvider>
         </AuthProvider>
+        <Footer />
       </body>
     </html>
   );

@@ -15,9 +15,7 @@ export default function Home() {
       <div className="text-center">
         <p className="text-xl font-semibold">Loading...</p>
       </div>
-      <footer className="mt-auto py-4 text-center text-gray-400">
-        <p>© 2024 Mateng</p>
-      </footer>
+
     </div>
   );
 }

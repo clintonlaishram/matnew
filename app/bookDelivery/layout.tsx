@@ -11,7 +11,6 @@ export default function DistanceCalculatorLayout({ children }: { children: React
       </header>
       <main className={styles.main}>{children}</main>
       <footer className={styles.footer}>
-        <p>© 2025 Your Company</p>
       </footer>
     </div>
   );
