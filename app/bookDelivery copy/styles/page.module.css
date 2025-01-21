@@ -1,0 +1,177 @@
+/* General Styling */
+.container {
+  background-color: #000; /* Black background */
+  color: #fff; /* White text */
+  padding: 16px;
+  font-family: 'Arial', sans-serif;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 32px;
+  color: #00ff7f; /* Accent color */
+}
+
+.subtitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 16px;
+  color: #00ff7f; /* Accent color */
+}
+
+/* Details Wrapper */
+.detailsWrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 16px; /* Space between sections */
+}
+
+.detailsSection {
+  flex: 1;
+  padding: 16px;
+  background-color: #121212; /* Slightly lighter black */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.detailsSection h2 {
+  margin-bottom: 16px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #00ff7f; /* Accent color */
+}
+
+/* Input Fields */
+.input,
+.textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 16px;
+  border: 1px solid #333;
+  border-radius: 4px;
+  background-color: #1a1a1a; /* Darker black */
+  color: #fff;
+  font-size: 1rem;
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none;
+  border-color: #00ff7f; /* Green focus border */
+  box-shadow: 0 0 5px #00ff7f;
+}
+
+/* Checkbox */
+.checkbox {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.checkbox input {
+  margin-right: 8px;
+}
+
+.checkbox label {
+  font-size: 1rem;
+  color: #fff;
+}
+
+/* Map Section */
+.mapSection {
+  margin-top: 32px;
+}
+
+.mapSection h2 {
+  margin-bottom: 16px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #00ff7f; /* Accent color */
+}
+
+/* Results Section */
+.results {
+  margin-top: 32px;
+  background-color: #121212;
+  padding: 16px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.results p {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 8px 0;
+}
+
+/* Buttons */
+.buttons {
+  margin-top: 32px;
+  text-align: center;
+}
+
+.button {
+  display: inline-block;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #000; /* Button text */
+  background-color: #00ff7f; /* Green button */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #00cc66; /* Darker green on hover */
+}
+
+.button:active {
+  background-color: #00994d; /* Even darker green on click */
+}
+
+/* Responsive Design */
+@media (min-width: 768px) {
+  /* Desktop: Pickup and Drop-Off Side by Side */
+  .detailsWrapper {
+    flex-direction: row;
+  }
+
+  .fv {
+    margin: 0;
+  }
+}
+/* styles.css or equivalent */
+
+.links {
+  color: #28a745; /* Green color for the link */
+  text-decoration: none; /* Remove underline */
+  font-weight: bold; /* Make text bold */
+  font-size: 16px; /* Adjust font size */
+  text-align: center; /* Center-align text */
+  display: block; /* Makes the link a block-level element for centering */
+  margin: 0 auto; /* Centers the link horizontally */
+  width: fit-content; /* Ensures the width of the link is based on its content */
+  transition: color 0.3s ease, text-decoration 0.3s ease; /* Smooth transition effect */
+}
+
+.links:hover {
+  color: #218838; /* Darker green on hover */
+  text-decoration: underline; /* Underline on hover */
+}
+
+.links:focus {
+  outline: 2px solid #218838; /* Outline for focus (a11y) */
+}
+
+.links:active {
+  color: #1c7430; /* Even darker green on click */
+}
+.cen {
+  text-align: center;
+  font-weight: bold;
+}
