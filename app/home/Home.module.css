@@ -131,4 +131,16 @@
   }
 }
 
+.footer {
+
+  color: white;
+  padding: 10px;
+  text-align: center;
+
+}
+
+.footer p {
+  margin: 0;
+  font-size: 0.9rem;
+}
 
