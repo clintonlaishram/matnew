@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { FiMenu } from 'react-icons/fi';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import styles from './GlobalHeader.module.css';
+import styles from './styles/GlobalHeader.module.css';
 
 const Header: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -69,7 +69,7 @@ const Header: React.FC = () => {
             <Link href="/discover" className={styles.navButton} onClick={() => setMenuOpen(false)}>
               Discover
             </Link>
-            <Link href="/bookDelivery" className={styles.navButton} onClick={() => setMenuOpen(false)}>
+            <Link href="/book" className={styles.navButton} onClick={() => setMenuOpen(false)}>
               Delivery Rates
             </Link>
             <Link href="/delivery_orders" className={styles.navButton} onClick={() => setMenuOpen(false)}>
@@ -107,7 +107,7 @@ const Header: React.FC = () => {
             <Link href="/discover" className={styles.navButton} onClick={() => setMenuOpen(false)}>
               Discover
             </Link>
-            <Link href="/bookDelivery" className={styles.navButton} onClick={() => setMenuOpen(false)}>
+            <Link href="/book" className={styles.navButton} onClick={() => setMenuOpen(false)}>
               Delivery Rates
             </Link>
             <Link href="/searchOrders" className={styles.navButton} onClick={() => setMenuOpen(false)}>

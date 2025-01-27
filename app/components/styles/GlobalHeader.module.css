@@ -14,6 +14,35 @@
   flex: 0 1 auto;
 }
 
+.calculateBtn {
+  background-color: #028800;  /* Blue background */
+  color: #fff;                /* White text */
+  padding: 12px 20px;          /* Padding for a comfortable button size */
+  font-size: 16px;             /* Font size */
+  border: none;               /* Remove the default border */
+  border-radius: 5px;         /* Slightly rounded corners */
+  cursor: pointer;            /* Show a pointer cursor when hovering */
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.calculateBtn:hover {
+  background-color: #0056b3;  /* Darker blue on hover */
+  transform: scale(1.05);      /* Slightly enlarge the button on hover */
+}
+
+.calculateBtn:active {
+  background-color: #e4e4e4;  /* Even darker blue when the button is clicked */
+  transform: scale(1);        /* Reset the scale when clicked */
+}
+
+.calculateBtn:disabled {
+  background-color: #d6d6d6;  /* Gray background when disabled */
+  color: #aaa;                /* Lighter text color when disabled */
+  cursor: not-allowed;        /* Show the "not-allowed" cursor when disabled */
+}
+
+
+
 .logoImage {
   height: 50px;
   width: auto;
