@@ -172,34 +172,17 @@ export default function ProductUploadPage() {
     setSuccessMessage(null);
   
     try {
-      // Fetch the user's name from the 'users' table
-      const { data: userData, error: userError } = await supabase
-        .from('users')
-        .select('name')
-        .eq('user_id', user.user_id)
-        .single();
-  
-      if (userError || !userData) {
-        throw new Error('Failed to fetch user name.');
-      }
-  
-      // Get the user's name
-      const userName = userData.name;
-  
-      // Upload media files and get their URLs
       const mediaUrls = await uploadMediaFiles(productMedia, user.user_id);
   
-      // Insert product data into the 'new_products' table
       const { error: dbError } = await supabase
         .from('new_products')
         .insert({
           user_id: user.user_id,
-          user_name: userName,  // Add the user's name here
           name: productName,
           description: productDescription,
           price_inr: parseFloat(productPrice),
           media_urls: mediaUrls,
-          category: category,
+          category: category, // Add the category here
         });
   
       if (dbError) throw new Error('Failed to save product.');
@@ -210,7 +193,7 @@ export default function ProductUploadPage() {
       setProductPrice('');
       setProductMedia([]);
       setMediaPreviews([]);
-      setCategory('');
+      setCategory('');  // Reset the category after upload
       fetchProducts(user.user_id);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred.');
@@ -218,7 +201,7 @@ export default function ProductUploadPage() {
       setUploading(false);
     }
   };
-    
+  
   const handleEdit = (product: Product) => {
     setEditingProductId(product.id);
     setUpdatedName(product.name);
@@ -344,12 +327,10 @@ export default function ProductUploadPage() {
     className={styles.select}
   >
     <option value="">Select a category</option>
-    <option value="electronics">Grocery</option>
-    <option value="electronics">Books</option>
     <option value="electronics">Electronics</option>
     <option value="fashion">Fashion</option>
     <option value="furniture">Furniture</option>
-    <option value="books">Others</option>
+    <option value="books">Books</option>
     {/* Add more categories here */}
   </select>
 </div>

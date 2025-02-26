@@ -362,6 +362,13 @@
 }
 
 /* Category Buttons Container */
+.categoryButtons {
+  display: flex;
+  flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+  gap: 10px;
+  justify-content: flex-start;
+}
+
 /* Individual Category Button */
 .categoryButton {
   padding: 10px 15px;
@@ -373,8 +380,6 @@
   border: 1px solid #ddd;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
-  min-width: 120px; /* Ensure the buttons are at least this wide */
-  text-align: center; /* Center the text inside the buttons */
 }
 
 /* Hover Effect for Category Buttons */
@@ -391,6 +396,7 @@
   font-weight: bold;
   border-color: #FFD700; /* Matching yellow border */
 }
+
 /* Category Buttons on Mobile */
 @media (max-width: 768px) {
   .categoryFilter {
@@ -398,17 +404,12 @@
   }
 
   .categoryButtons {
-    display: grid; /* Use grid for layout */
-    grid-template-columns: repeat(2, 1fr); /* 2 columns per row */
-    gap: 10px;
     justify-content: center;
-    width: 100%; /* Make sure it takes up the full width */
   }
 
   .categoryButton {
     padding: 8px 12px;
     font-size: 0.9rem;
-    text-align: center; /* Center the text inside the buttons */
   }
 }
 
@@ -437,7 +438,7 @@
 /* Mobile View */
 @media (max-width: 768px) {
   .filtersContainer {
-    flex-direction: row;
+    flex-direction: column;
     align-items: flex-start;
   }
 

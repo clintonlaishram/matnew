@@ -163,7 +163,14 @@ export default function BusinessPage() {
         </button>
       </div>
 
-
+      {/* Buy Now Modal */}
+      {selectedProduct && (
+        <BuyNowModal
+          product={selectedProduct}
+          businessId={business.user_id} // Pass the business ID
+          onClose={() => setSelectedProduct(null)}
+        />
+      )}
     </div>
   );
 }

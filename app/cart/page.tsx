@@ -18,7 +18,11 @@ const CartPage: React.FC = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-5">
-      <h1 className="text-2xl font-bold mb-5">Your Cart</h1>
+      <a href="/discover/product" className="text-2xl font-bold mb-5 text-gray-500 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 text-centre">
+  Back to All Products
+</a>
+
+      <h1 className="text-2xl font-bold mb-5 text-white">Your Cart</h1>
       {cart.length === 0 ? (
         <p className="text-gray-500">Your cart is empty.</p>
       ) : (
@@ -31,12 +35,12 @@ const CartPage: React.FC = () => {
               >
                 <div>
                   <h2 className="font-semibold  text-white py-1 px-3">{item.name}</h2>
-                  <p className="font-semibold  text-white py-1 px-2">Price: {item.price ? `$${item.price}` : 'N/A'}</p>
+                  <p className="font-semibold  text-white py-1 px-2">Price: {item.price ? `₹${item.price}` : 'N/A'}</p>
                   <p  className="font-semibold  text-white py-1 px-2">Quantity: {item.qty}</p>
                   <p className="font-semibold  text-white py-1 px-2">
                     Total:{' '}
                     {item.price
-                      ? `$${(parseFloat(item.price) * item.qty).toFixed(2)}`
+                      ? `₹${(parseFloat(item.price) * item.qty).toFixed(2)}`
                       : 'N/A'}
                   </p>
                 </div>
@@ -61,7 +65,7 @@ const CartPage: React.FC = () => {
           </ul>
           <div className="flex justify-between items-center mb-5 ">
             <h2 className="text-xl font-bold text-white">
-              Total Price: ${totalPrice.toFixed(2)}
+              Total Price: ₹{totalPrice.toFixed(2)}
             </h2>
             <div className="flex space-x-4">
               <button

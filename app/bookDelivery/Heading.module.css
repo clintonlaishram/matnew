@@ -1,0 +1,7 @@
+/* styles/Heading.module.css */
+.heading {
+    color: #4CAF50;
+    font-family: Arial, sans-serif;
+    font-size: 36px;
+    text-align: center;
+}

@@ -1,0 +1,267 @@
+/* Container */
+.container {
+  width: 80%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Title */
+.title {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Error and Success Messages */
+.error, .success {
+  color: red;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.success {
+  color: green;
+}
+
+/* Form Group */
+.formGroup {
+  margin-bottom: 20px;
+}
+
+.formGroup label {
+  font-size: 1.2rem;
+  color: #ddd;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.input, .textarea, .fileInput {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #444;
+  background-color: #222;
+  color: white;
+  border-radius: 5px;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.fileInput {
+  border: none;
+  padding: 10px;
+  background-color: #222;
+  color: white;
+}
+
+.input:focus, .textarea:focus {
+  outline: none;
+  border-color: #66afe9;
+}
+
+/* Previews */
+.previews {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.preview {
+  background-color: #333;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.thumbnail {
+  max-width: 100px;
+  max-height: 100px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+/* Upload Button */
+.uploadButton, .saveButton, .cancelButton, .editButton {
+  padding: 10px 20px;
+  background-color: #444;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.uploadButton:disabled {
+  background-color: #666;
+  cursor: not-allowed;
+}
+
+.uploadButton:hover, .saveButton:hover, .cancelButton:hover, .editButton:hover {
+  background-color: #555;
+}
+
+/* Product List */
+.productListTitle {
+  font-size: 2rem;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.productList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.productCard {
+  background-color: #222;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.productCard h3 {
+  font-size: 1.5rem;
+  color: #ddd;
+}
+
+.productCard p {
+  color: #bbb;
+}
+
+.productCard .thumbnailList {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.productCard .thumbnail {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+/* Edit Modal Styles */
+.editModalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.editModal {
+  background-color: #333;
+  padding: 30px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.editModal h3 {
+  color: white;
+  margin-bottom: 20px;
+}
+
+.editModal .formGroup {
+  margin-bottom: 20px;
+}
+
+.editModal .formGroup label {
+  color: #ccc;
+}
+
+.editModal .input, .editModal .textarea {
+  background-color: #222;
+  border-color: #444;
+}
+
+.editModal .previews {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.editModal .preview {
+  background-color: #444;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.editModal .saveButton {
+  background-color: #28a745;
+}
+
+.editModal .saveButton:hover {
+  background-color: #218838;
+}
+
+.editModal .cancelButton {
+  background-color: #dc3545;
+}
+
+.editModal .cancelButton:hover {
+  background-color: #c82333;
+}
+
+/* Additional styling for editing media previews */
+.editModal .preview img {
+  max-width: 80px;
+  max-height: 80px;
+  object-fit: cover;
+}
+
+.editModal .preview.new {
+  background-color: #444;
+  padding: 10px;
+  border-radius: 5px;
+  color: #ccc;
+}
+
+/* Remove global selector */
+.body {
+  background-color: black;
+  color: white;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+}
+
+.h1, .h2, .h3 {
+  color: white;
+}
+
+.error, .success {
+  color: red;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.success {
+  color: green;
+}
+
+/* Remove universal selector * and style each class instead */
+/* Button Styles */
+.deleteButton {
+  padding: 10px 20px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.deleteButton:hover {
+  background-color: #c82333;
+}

@@ -121,12 +121,10 @@ const AllProductMediaPage = () => {
 
   return (
     <div className={styles.exploreContainer}>
-      <div className="flex flex-col items-center justify-center">
-  <h1 className="text-4xl font-bold text-white-800 md:text-6xl">Explore Products</h1>
-  <h2 className="text-4xl font-bold text-white-800 md:text-2xl mt-4">The buying options will be available starting 2nd March 2025.</h2>
-</div>
+      <div className="flex items-center justify-center">
+        <h1 className="text-4xl font-bold text-white-800 md:text-6xl">Explore Products</h1>
+      </div>
 
-      
       <button className={styles.exploreSellersButton} onClick={() => router.push('/discover_full')}>
         Explore Sellers
       </button>
@@ -193,6 +191,9 @@ const AllProductMediaPage = () => {
                 </p>
               </div>
               <div className={styles.actionIcons}>
+                <button className={styles.buyNowButton} onClick={() => handleAddToCart(product)} aria-label="Add to Cart">
+                  🛒
+                </button>
                 {product.phone && (
                   <button className={styles.callIcon} onClick={() => handleCall(product.phone)} aria-label="Call">
                     📞

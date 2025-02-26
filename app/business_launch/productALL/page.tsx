@@ -15,7 +15,6 @@ interface Product {
   id: number;
   name: string;
   description: string;
-  category: string;
   price_inr: number;
   media_urls: string[];
 }
@@ -36,7 +35,6 @@ export default function ProductUploadPage() {
   const [updatedMedia, setUpdatedMedia] = useState<File[]>([]);
   const [editMediaPreviews, setEditMediaPreviews] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [category, setCategory] = useState<string>('');  // New state for category
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -76,36 +74,6 @@ export default function ProductUploadPage() {
     }
   };
 
-
-  const handleDelete = async (productId: number) => {
-    if (!user) {
-      setError('User information is missing. Please log in again.');
-      return;
-    }
-  
-    const confirmDelete = window.confirm('Are you sure you want to delete this product?');
-    if (!confirmDelete) return;
-  
-    setError(null);
-    setSuccessMessage(null);
-  
-    try {
-      // Delete the product from the database
-      const { error: deleteError } = await supabase
-        .from('new_products')
-        .delete()
-        .eq('id', productId)
-        .eq('user_id', user.user_id);
-  
-      if (deleteError) throw new Error('Failed to delete product.');
-  
-      setSuccessMessage('Product deleted successfully!');
-      fetchProducts(user.user_id); // Re-fetch products after deletion
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unknown error occurred.');
-    }
-  };
-  
   const handleMediaChange = (e: React.ChangeEvent<HTMLInputElement>, isEdit = false) => {
     if (e.target.files) {
       const files = Array.from(e.target.files);
@@ -161,56 +129,37 @@ export default function ProductUploadPage() {
       setError('User information is missing. Please log in again.');
       return;
     }
-  
-    if (!productName || !productDescription || !productPrice || productMedia.length === 0 || !category) {
+
+    if (!productName || !productDescription || !productPrice || productMedia.length === 0) {
       setError('All fields are required.');
       return;
     }
-  
+
     setUploading(true);
     setError(null);
     setSuccessMessage(null);
-  
+
     try {
-      // Fetch the user's name from the 'users' table
-      const { data: userData, error: userError } = await supabase
-        .from('users')
-        .select('name')
-        .eq('user_id', user.user_id)
-        .single();
-  
-      if (userError || !userData) {
-        throw new Error('Failed to fetch user name.');
-      }
-  
-      // Get the user's name
-      const userName = userData.name;
-  
-      // Upload media files and get their URLs
       const mediaUrls = await uploadMediaFiles(productMedia, user.user_id);
-  
-      // Insert product data into the 'new_products' table
+
       const { error: dbError } = await supabase
         .from('new_products')
         .insert({
           user_id: user.user_id,
-          user_name: userName,  // Add the user's name here
           name: productName,
           description: productDescription,
           price_inr: parseFloat(productPrice),
           media_urls: mediaUrls,
-          category: category,
         });
-  
+
       if (dbError) throw new Error('Failed to save product.');
-  
+
       setSuccessMessage('Product uploaded successfully!');
       setProductName('');
       setProductDescription('');
       setProductPrice('');
       setProductMedia([]);
       setMediaPreviews([]);
-      setCategory('');
       fetchProducts(user.user_id);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred.');
@@ -218,7 +167,7 @@ export default function ProductUploadPage() {
       setUploading(false);
     }
   };
-    
+
   const handleEdit = (product: Product) => {
     setEditingProductId(product.id);
     setUpdatedName(product.name);
@@ -279,7 +228,6 @@ export default function ProductUploadPage() {
       {successMessage && <p className={styles.success}>{successMessage}</p>}
 
       <div>
-        {/* Upload Form */}
         <div className={styles.formGroup}>
           <label htmlFor="productName">Product Name</label>
           <input
@@ -313,11 +261,11 @@ export default function ProductUploadPage() {
         </div>
 
         <div className={styles.formGroup}>
-          <label htmlFor="productMedia">Product Images/Videos</label>
+          <label htmlFor="productMedia">Upload Images and Videos</label>
           <input
             id="productMedia"
             type="file"
-            accept="image/*,video/*"
+            accept="image/*,video/*" // Allow images and videos
             multiple
             onChange={handleMediaChange}
             className={styles.fileInput}
@@ -335,26 +283,6 @@ export default function ProductUploadPage() {
           </div>
         </div>
 
-        <div className={styles.formGroup}>
-  <label htmlFor="productCategory">Product Category</label>
-  <select
-    id="productCategory"
-    value={category}
-    onChange={(e) => setCategory(e.target.value)}
-    className={styles.select}
-  >
-    <option value="">Select a category</option>
-    <option value="electronics">Grocery</option>
-    <option value="electronics">Books</option>
-    <option value="electronics">Electronics</option>
-    <option value="fashion">Fashion</option>
-    <option value="furniture">Furniture</option>
-    <option value="books">Others</option>
-    {/* Add more categories here */}
-  </select>
-</div>
-
-
         <button onClick={handleUpload} disabled={uploading} className={styles.uploadButton}>
           {uploading ? 'Uploading...' : 'Upload Product'}
         </button>
@@ -366,7 +294,6 @@ export default function ProductUploadPage() {
           <div key={product.id} className={styles.productCard}>
             <h3>{product.name}</h3>
             <p>{product.description}</p>
-            <p>Category: {product.category}</p> {/* Display the category here */}
             <p>Price: ₹{product.price_inr}</p>
             <div className={styles.thumbnailList}>
               {product.media_urls.slice(0, 3).map((url, index) => (
@@ -374,101 +301,77 @@ export default function ProductUploadPage() {
               ))}
             </div>
             <div>
-              <button onClick={() => handleEdit(product)} className={styles.editButton}>
-                Edit
-              </button>
-              <button onClick={() => handleDelete(product.id)} className={styles.deleteButton}>
-                Delete
-              </button>
+              <button onClick={() => handleEdit(product)} className={styles.editButton}>Edit</button>
             </div>
           </div>
         ))}
       </div>
 
-
       {/* Edit Modal */}
       {editingProductId && (
-        <div className={styles.editModalOverlay}>
-          <div className={styles.editModal}>
-            <h3>Edit Product</h3>
-            <div className={styles.formGroup}>
-              <label htmlFor="updatedName">Product Name</label>
-              <input
-                id="updatedName"
-                type="text"
-                value={updatedName}
-                onChange={(e) => setUpdatedName(e.target.value)}
-                className={styles.input}
-              />
-            </div>
-
-            <div className={styles.formGroup}>
-              <label htmlFor="updatedDescription">Product Description</label>
-              <textarea
-                id="updatedDescription"
-                value={updatedDescription}
-                onChange={(e) => setUpdatedDescription(e.target.value)}
-                className={styles.textarea}
-              />
-            </div>
-
-            <div className={styles.formGroup}>
-              <label htmlFor="updatedPrice">Product Price (INR)</label>
-              <input
-                id="updatedPrice"
-                type="number"
-                value={updatedPrice}
-                onChange={(e) => setUpdatedPrice(e.target.value)}
-                className={styles.input}
-              />
-            </div>
-
-            <div className={styles.formGroup}>
-              <label htmlFor="updatedMedia">Update Images/Videos</label>
-              <input
-                id="updatedMedia"
-                type="file"
-                accept="image/*,video/*"
-                multiple
-                onChange={(e) => handleMediaChange(e, true)}
-                className={styles.fileInput}
-              />
-              <div className={styles.previews}>
-                {editMediaPreviews.map((url, index) => (
-                  <div key={index} className={styles.preview}>
-                    <img
-                      src={url}
-                      alt={`Edit Preview ${index}`}
-                      className={styles.thumbnail}
-                    />
-                  </div>
-                ))}
-                {updatedMedia.map((file, index) => (
-                  <div key={index} className={styles.preview}>New</div>
-                ))}
-              </div>
-            </div>
-            <div className={styles.formGroup}>
-  <label htmlFor="productCategory">Product Category</label>
-  <select
-    id="productCategory"
-    value={category}
-    onChange={(e) => setCategory(e.target.value)}
-    className={styles.select}
-  >
-    <option value="">Select a category</option>
-    <option value="electronics">Electronics</option>
-    <option value="fashion">Fashion</option>
-    <option value="furniture">Furniture</option>
-    <option value="books">Books</option>
-    {/* Add more categories here */}
-  </select>
-</div>
-
-
-            <button onClick={handleSaveChanges} className={styles.saveButton}>Save Changes</button>
-            <button onClick={handleCancelEdit} className={styles.cancelButton}>Cancel</button>
+        <div className={styles.editModal}>
+          <h3>Edit Product</h3>
+          <div className={styles.formGroup}>
+            <label htmlFor="updatedName">Product Name</label>
+            <input
+              id="updatedName"
+              type="text"
+              value={updatedName}
+              onChange={(e) => setUpdatedName(e.target.value)}
+              className={styles.input}
+            />
           </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="updatedDescription">Product Description</label>
+            <textarea
+              id="updatedDescription"
+              value={updatedDescription}
+              onChange={(e) => setUpdatedDescription(e.target.value)}
+              className={styles.textarea}
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="updatedPrice">Product Price (INR)</label>
+            <input
+              id="updatedPrice"
+              type="number"
+              value={updatedPrice}
+              onChange={(e) => setUpdatedPrice(e.target.value)}
+              className={styles.input}
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label htmlFor="updatedMedia">Update Images/Videos</label>
+            <input
+              id="updatedMedia"
+              type="file"
+              accept="image/*,video/*" // Allow images and videos
+              multiple
+              onChange={(e) => handleMediaChange(e, true)}
+              className={styles.fileInput}
+            />
+            <div className={styles.previews}>
+              {editMediaPreviews.map((url, index) => (
+                <div key={index} className={styles.preview}>
+                  <img
+                    key={index}
+                    src={url}
+                    alt={`Edit Preview ${index}`}
+                    className={styles.thumbnail}
+                  />
+                </div>
+              ))}
+              {updatedMedia.map((file, index) => (
+                <div key={index} className={styles.preview}>New</div>
+              ))}
+            </div>
+          </div>
+
+          <button onClick={handleSaveChanges} className={styles.saveButton}>Save Changes</button>
+          <button onClick={handleCancelEdit} className={styles.cancelButton}>Cancel</button>
         </div>
       )}
     </div>

@@ -60,6 +60,21 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onBuyNow, addCartIco
                   className="w-full h-full object-cover rounded-lg"
                 />
               )}
+              {addCartIcon && (
+                <button
+                  className="absolute top-2 right-2 bg-yellow-500 text-white p-2 rounded-full hover:bg-yellow-600"
+                  onClick={() =>
+                    addToCart({
+                      id: product.id,
+                      name: product.name,
+                      price: product.price || 'N/A',
+                      qty: 1,
+                    })
+                  }
+                >
+                  🛒
+                </button>
+              )}
             </div>
           );
         })}
@@ -87,6 +102,26 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onBuyNow, addCartIco
       <p className="text-sm text-gray-600 mb-4 text-center">{product.description}</p>
       <p className="text-sm text-gray-600 mb-4 text-center">Rs. {product.price_inr}</p>
       <div className="flex gap-4">
+        <button
+          onClick={() =>
+            addToCart({
+              id: product.id,
+              name: product.name,
+              price: product.price || 'N/A',
+              qty: 1,
+            })
+          }
+          className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 flex-1"
+        >
+          Add to Cart 🛒
+        </button>
+        <button
+          onClick={() => onBuyNow(product)}
+          className="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-black hover:text-green-600 flex-1"
+        >
+
+          Buy Now
+        </button>
       </div>
     </div>
   );
