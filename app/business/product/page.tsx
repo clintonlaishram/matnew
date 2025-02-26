@@ -18,6 +18,7 @@ interface Product {
   category: string;
   price_inr: number;
   media_urls: string[];
+  discounted_price?: number; // Optional field for discounted price
 }
 
 export default function ProductUploadPage() {
@@ -38,6 +39,9 @@ export default function ProductUploadPage() {
   const [error, setError] = useState<string | null>(null);
   const [category, setCategory] = useState<string>('');  // New state for category
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [discountRate, setDiscountRate] = useState<number>(0); // New state for discount rate
+const [discountedPrice, setDiscountedPrice] = useState<number>(0); // New state for discounted price
+
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -75,7 +79,18 @@ export default function ProductUploadPage() {
       setProducts(productsData || []);
     }
   };
-
+  const handleDiscountRateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rate = parseFloat(e.target.value);
+    setDiscountRate(rate);
+    setDiscountedPrice(productPrice ? parseFloat(productPrice) * (1 - rate / 100) : 0);
+  };
+  
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const price = e.target.value;
+    setProductPrice(price);
+    setDiscountedPrice(price ? parseFloat(price) * (1 - discountRate / 100) : 0);
+  };
+  
 
   const handleDelete = async (productId: number) => {
     if (!user) {
@@ -200,6 +215,8 @@ export default function ProductUploadPage() {
           price_inr: parseFloat(productPrice),
           media_urls: mediaUrls,
           category: category,
+          discount_rate: discountRate,  // Store the discount rate
+          discounted_price: discountedPrice,  // Store the discounted price
         });
   
       if (dbError) throw new Error('Failed to save product.');
@@ -210,6 +227,8 @@ export default function ProductUploadPage() {
       setProductPrice('');
       setProductMedia([]);
       setMediaPreviews([]);
+      setDiscountRate(0);
+      setDiscountedPrice(0);
       setCategory('');
       fetchProducts(user.user_id);
     } catch (err) {
@@ -218,7 +237,7 @@ export default function ProductUploadPage() {
       setUploading(false);
     }
   };
-    
+      
   const handleEdit = (product: Product) => {
     setEditingProductId(product.id);
     setUpdatedName(product.name);
@@ -313,6 +332,29 @@ export default function ProductUploadPage() {
         </div>
 
         <div className={styles.formGroup}>
+  <label htmlFor="discountRate">Discount Rate (%)</label>
+  <input
+    id="discountRate"
+    type="number"
+    value={discountRate}
+    onChange={handleDiscountRateChange}
+    className={styles.input}
+  />
+</div>
+
+<div className={styles.formGroup}>
+  <label htmlFor="discountedPrice">Discounted Price (INR)</label>
+  <input
+    id="discountedPrice"
+    type="number"
+    value={discountedPrice.toFixed(2)}
+    disabled
+    className={styles.input}
+  />
+</div>
+
+
+        <div className={styles.formGroup}>
           <label htmlFor="productMedia">Product Images/Videos</label>
           <input
             id="productMedia"
@@ -374,6 +416,13 @@ export default function ProductUploadPage() {
               ))}
             </div>
             <div>
+              {product.discounted_price !== undefined && product.discounted_price > 0 && (
+                <p>Discounted Price: ₹{product.discounted_price.toFixed(2)}</p>
+              )}
+            </div>
+
+
+            <div>
               <button onClick={() => handleEdit(product)} className={styles.editButton}>
                 Edit
               </button>
@@ -422,6 +471,7 @@ export default function ProductUploadPage() {
                 className={styles.input}
               />
             </div>
+            
 
             <div className={styles.formGroup}>
               <label htmlFor="updatedMedia">Update Images/Videos</label>
