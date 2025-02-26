@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-
+    "test": "jest", // <- Remove this trailing comma
     "start": "next start",
     "build": "next build",
     "lint": "eslint .",
