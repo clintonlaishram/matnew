@@ -6,10 +6,10 @@
     "start": "next start",
     "build": "next build",
     "lint": "eslint .",
-    "test": "jest"
+    "test": "jest",
     "your-custom-command-here": "command",
-    "deploy": "your-deploy-command-here"
-    "dev": "next dev",
+    "deploy": "your-deploy-command-here",
+    "dev": "next dev"
   },
   "dependencies": {
     "@mapbox/polyline": "^1.2.1",
