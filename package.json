@@ -8,8 +8,9 @@
     "lint": "eslint .",
     "test": "jest",
     "your-custom-command-here": "command",
-    "deploy": "your-deploy-command-here",
+    "deploy": "vercel --prod",
     "dev": "next dev"
+    
   },
   "dependencies": {
     "@mapbox/polyline": "^1.2.1",
