@@ -10,7 +10,6 @@
     "your-custom-command-here": "command",
     "deploy": "vercel --prod",
     "dev": "next dev"
-    
   },
   "dependencies": {
     "@mapbox/polyline": "^1.2.1",
@@ -63,6 +62,7 @@
     "postcss": "^8.4.49",
     "react-leaflet": "^4.2.1",
     "tailwindcss": "^3.4.17",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "vercel": "^41.2.2"
   }
 }
