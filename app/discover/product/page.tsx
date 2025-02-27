@@ -121,40 +121,62 @@ const AllProductMediaPage = () => {
 
   return (
     <div className={styles.exploreContainer}>
-      <div className="flex flex-col items-center justify-center">
-  <h1 className="text-4xl font-bold text-white-800 md:text-6xl">Explore Products</h1>
-  <h2 className="text-4xl font-bold text-white-800 md:text-2xl mt-4">The buying options will be available starting 2nd March 2025.</h2>
-</div>
-
+      <div className="flex flex-col items-center justify-center text-center">
+        <h1 className="text-4xl font-bold text-white-800 md:text-6xl">Explore Products</h1>
+        <h2 className="text-2xl text-white-200 md:text-1xl mt-2">The buying options will be available starting 2nd March 2025.</h2>
       
-      <button className={styles.exploreSellersButton} onClick={() => router.push('/discover_full')}>
+
+      <button className="mt-6 inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-white hover:text-green-600" onClick={() => router.push('/discover')}>
         Explore Sellers
       </button>
+      </div>
 
-      {/* Category Filter */}
+      {/* Category Filter (Mobile Dropdown) */}
       <div className={styles.categoryButtons}>
-  {categories.map((category, index) => (
-    <button
-      key={index}
-      className={`${styles.categoryButton} ${selectedCategory === category ? styles.selected : ''}`}
-      onClick={() => {
-        setSelectedCategory(category);
-        filterProducts(searchTerm, category);
-      }}
-    >
-      {category}
-    </button>
-  ))}
-  <button
-    className={`${styles.categoryButton} ${!selectedCategory ? styles.selected : ''}`}
-    onClick={() => {
-      setSelectedCategory(null);
-      filterProducts(searchTerm, null);
-    }}
-  >
-    All Categories
-  </button>
-</div>
+        <div className="hidden md:block">
+          {categories.map((category, index) => (
+            <button
+              key={index}
+              className={`${styles.categoryButton} ${selectedCategory === category ? styles.selected : ''}`}
+              onClick={() => {
+                setSelectedCategory(category);
+                filterProducts(searchTerm, category);
+              }}
+            >
+              {category}
+            </button>
+          ))}
+          <button
+            className={`${styles.categoryButton} ${!selectedCategory ? styles.selected : ''}`}
+            onClick={() => {
+              setSelectedCategory(null);
+              filterProducts(searchTerm, null);
+            }}
+          >
+            All Categories
+          </button>
+        </div>
+
+        {/* Mobile Dropdown */}
+        <div className="md:hidden">
+          <select
+            className={styles.categoryDropdown}
+            value={selectedCategory || ''}
+            onChange={(e) => {
+              const category = e.target.value;
+              setSelectedCategory(category || null);
+              filterProducts(searchTerm, category || null);
+            }}
+          >
+            <option value="">All Categories</option>
+            {categories.map((category, index) => (
+              <option key={index} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
 
       {/* Search Bar */}
       <div className={styles.searchBar}>
@@ -188,9 +210,6 @@ const AllProductMediaPage = () => {
             <div className={styles.overlay}>
               <div className={styles.productInfo}>
                 <h2 className={styles.productName}>{product.name}</h2>
-                <p className={styles.productDescription}>
-                  {product.description.length > 100 ? `${product.description.slice(0, 100)}...` : product.description}
-                </p>
               </div>
               <div className={styles.actionIcons}>
                 {product.phone && (

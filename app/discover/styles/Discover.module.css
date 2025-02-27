@@ -1,256 +1,218 @@
-/* General Styles */
+/* Container Styles */
 .container {
-  padding: 16px;
-
-  background: linear-gradient(to bottom, #000, #333); /* Black gradient background */
-  color: #fff; /* Ensure text is readable on a black background */
+  font-family: 'Arial', sans-serif;
+  padding: 20px;
 }
 
-/* Welcome Section */
-.h1 {
-  margin-bottom: 16px;
-  color: #fff;
+/* Section Header Styles */
+.bg-black {
+  background-color: #000;
+  color: white;
 }
 
-.bg-white {
-  background-color: #111; /* Dark background for better contrast */
-}
-.imageContainer {
-  position: relative;
-  width: 300px; /* or use percentages for responsive design */
-  height: 200px;
+.py-16 {
+  padding: 4rem 0;
 }
 
-.container.mx-auto {
-  max-width: 1200px;
-  margin: 0 auto;
+.text-center {
+  text-align: center;
 }
 
-.h1.text-4xl {
-  font-size: 2rem;
+.text-4xl {
+  font-size: 2.25rem;
 }
 
-@media (min-width: 768px) {
-  h1.text-4xl {
-    font-size: 3rem;
-  }
+.font-bold {
+  font-weight: bold;
 }
 
-.p {
-  font-size: 1rem;
-  color: #aaa;
+.text-white-800 {
+  color: #f0f0f0;
+}
+
+.md\:text-6xl {
+  font-size: 3.75rem;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.text-gray-600 {
+  color: #718096;
+}
+
+.mt-6 {
+  margin-top: 1.5rem;
 }
 
 .inline-block {
-  text-decoration: none;
-  cursor: pointer;
-  background-color: #007bff;
-  color: #fff;
-  padding: 8px 12px;
-  border-radius: 4px;
-  transition: background-color 0.2s ease;
+  display: inline-block;
 }
 
-.inline-block:hover {
-  background-color: #0056b3;
+.bg-green-600 {
+  background-color: #38a169;
 }
 
-/* Search and Filter Section */
+.text-white {
+  color: #ffffff;
+}
+
+.px-6 {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.py-3 {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.hover\:bg-white:hover {
+  background-color: #ffffff;
+}
+
+.hover\:text-green-600:hover {
+  color: #38a169;
+}
+
+/* Search and Filter */
 .searchFilter {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-bottom: 20px;
+  margin-top: 2rem;
+  align-items: center;
 }
 
 .searchInput {
-  padding: 8px;
-  border: 1px solid #555;
-  border-radius: 4px;
-  font-size: 14px;
-  background-color: #222;
-  color: #fff;
+  width: 100%;
+  max-width: 400px;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #dcdcdc;
+  font-size: 1rem;
 }
 
 .categoryChips {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  justify-content: center;
 }
 
 .chip {
-  padding: 5px 10px;
-  border: 1px solid #555;
-  border-radius: 16px;
-  background-color: #333;
-  font-size: 14px;
-  color: #fff;
+  background-color: #f1f1f1;
+  color: #333;
+  padding: 0.5rem 1rem;
+  margin: 0.25rem;
+  border-radius: 2rem;
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  border: 1px solid #dcdcdc;
+  transition: background-color 0.3s ease;
+}
+
+.selected {
+  background-color: #38a169;
+  color: white;
+  border-color: #38a169;
 }
 
 .chip:hover {
-  background-color: #444;
+  background-color: #e2e8f0;
 }
 
-.chip.selected {
-  background-color: #007bff;
-  color: #fff;
-  border-color: #007bff;
-}
-
-/* Main Content Layout */
-.content {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-/* Business Section (Horizontal Scroll) */
+/* Business Section */
 .businessSection {
-  display: flex;
-  gap: 16px;
-  padding: 15px;
-  overflow-x: auto;
-  max-height: 100%;
-  background-color: #111;
-  border: 1px solid #555;
-  border-radius: 8px;
-  scroll-behavior: smooth;
-}
-
-.businessSection::-webkit-scrollbar {
-  height: 8px;
-}
-
-.businessSection::-webkit-scrollbar-thumb {
-  background-color: #555;
-  border-radius: 4px;
-}
-
-.businessSection::-webkit-scrollbar-thumb:hover {
-  background-color: #777;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
 }
 
 .businessCard {
-  min-width: 250px;
-  border: 1px solid #555;
-  border-radius: 8px;
-  padding: 15px;
-  background-color: #222;
-  flex-shrink: 0;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-  color: #fff;
+  background-color: #fff;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 350px; /* Fixed height for consistent size */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.businessCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.businessCard h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.businessCard p {
+  font-size: 1rem;
+  color: #555;
+}
+
+.photoFrame {
+  margin-top: 1rem;
+  width: 100%;
+  height: 180px; /* Fixed height for photo */
+  border: 2px solid #e2e8f0;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .photo {
   width: 100%;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 4px;
-  margin-top: 10px;
+  height: auto;
+  object-fit: cover; /* Ensures the image scales and fits within the frame */
 }
 
-/* Products Section */
-.productSection {
-  margin-top: 20px;
-}
-
-.subheading {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 20px;
-  text-align: center;
-  color: #fff;
-}
-
-.mediaGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-}
-
-.productCard {
-  border: 1px solid #555;
-  border-radius: 8px;
-  background-color: #222;
-  padding: 15px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
-  color: #fff;
-}
-
-.productName {
-  font-size: 18px;
-  font-weight: bold;
-  color: #fff;
-  margin-bottom: 10px;
-}
-
-.productDescription {
-  font-size: 14px;
-  color: #aaa;
-  margin-bottom: 10px;
-}
-
-.mediaContainer {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
-}
-
-.mediaItem {
+/* Modal Styling */
+.businessModal {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 200px;
-  object-fit: cover;
-  border-radius: 4px;
-  border: 1px solid #555;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* Loading/Error Styles */
-.loading {
-  text-align: center;
-  font-size: 18px;
-  color: #aaa;
+.businessModalContent {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.error {
+.closeButton {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.closeButton:hover {
   color: red;
-  text-align: center;
-  font-size: 18px;
-}
-
-.noProducts {
-  text-align: center;
-  font-size: 18px;
-  color: #666;
-}
-
-/* Responsive Styles for Mobile */
-@media (max-width: 768px) {
-  .mediaGrid {
-    grid-template-columns: 1fr; /* Single-column layout for mobile */
-  }
-
-  .mediaItem {
-    height: 150px; /* Smaller media display */
-  }
-
-  .businessCard {
-    padding: 10px;
-  }
-
-  .productName {
-    font-size: 16px; /* Smaller font for product name */
-  }
-
-  .productDescription {
-    font-size: 12px; /* Smaller font for product description */
-  }
-
-  .seeMoreButton,
-  .buyNowButton {
-    font-size: 12px; /* Smaller button text */
-    padding: 6px 10px; /* Smaller button size */
-  }
 }
