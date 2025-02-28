@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Polyline, useMapEvents, useMap } from 'react-leaflet';
 import { LeafletMouseEvent } from 'leaflet';
 import polyline from '@mapbox/polyline'; // For polyline decoding
@@ -8,6 +8,7 @@ import { supabase } from '../../lib/supabaseClient'; // Import supabase client
 import 'leaflet/dist/leaflet.css';
 import styles from './styles/DistanceCalculator.module.css'; // Import the CSS module
 import { getDistance } from 'geolib'; // This can help calculate the distance between two lat/lng coordinates in meters
+import Link from 'next/link'; // Import Link from Next.js
 
 // Define the types for the suggestion response
 interface Location {
@@ -35,6 +36,8 @@ interface Suggestion {
 const DistanceCalculator = () => {
   const [origin, setOrigin] = useState<string>('');
   const [destination, setDestination] = useState<string>('');
+  const [pickupDetails, setPickupDetails] = useState<string>(''); // Pickup Details
+  const [dropDetails, setDropDetails] = useState<string>(''); // Drop Details
   const [originCoords, setOriginCoords] = useState<{ lat: number; lng: number } | null>(null);
   const [destinationCoords, setDestinationCoords] = useState<{ lat: number; lng: number } | null>(null);
   const [originSuggestions, setOriginSuggestions] = useState<Suggestion[]>([]);
@@ -44,7 +47,9 @@ const DistanceCalculator = () => {
   const [distance, setDistance] = useState<string | null>(null);
   const [deliveryCharge, setDeliveryCharge] = useState<string | null>(null);
   const [routeCoordinates, setRouteCoordinates] = useState<Array<[number, number]>>([]);
-
+  const [orderId, setOrderId] = useState<string | null>(null); // For storing the order ID
+  const [showPopup, setShowPopup] = useState<boolean>(false); // For controlling the visibility of the popup
+  
   // Coordinates for Manipur, India
   const manipurLocation = { lat: 24.817, lng: 93.936 };
 
@@ -106,6 +111,17 @@ const DistanceCalculator = () => {
     }
   };
 
+  // Ensure MapRedraw is defined properly before usage
+  const MapRedraw = () => {
+    const map = useMap();
+    useEffect(() => {
+      if (map) {
+        map.invalidateSize();
+      }
+    }, [originCoords, destinationCoords, routeCoordinates, map]);
+    return null;
+  };
+
   // Function to calculate distance between origin and destination
   const calculateDistance = async () => {
     setDistance('Calculating...');
@@ -148,45 +164,37 @@ const DistanceCalculator = () => {
   const calculateDistanceFromCenter = (coords: { lat: number; lng: number }) => {
     return getDistance(manipurLocation, coords) / 1000; // Returns distance in kilometers
   };
-
+  
   const calculateDeliveryCharge = (distanceInKm: string) => {
     const distance = parseFloat(distanceInKm);
-
+    
     // Calculate distance from center for both origin and destination
     const originDistanceFromCenter = originCoords ? calculateDistanceFromCenter(originCoords) : 0;
     const destinationDistanceFromCenter = destinationCoords ? calculateDistanceFromCenter(destinationCoords) : 0;
-
-    // Base charge
-    const baseCharge = 27;
-
+  
+    // Calculate charge based on distance
     let charge = 0;
-
-    if (distance <= 5) {
-      // ₹27 base + ₹10 per km for distances up to 5 km
-      charge = baseCharge + (distance - 0) * 10;
-    } else if (distance <= 20) {
-      // Base charge for 5 km + ₹15 for each km from 5 to 20 km
-      charge = baseCharge + 5 * 10 + (distance - 5) * 15;
-    } else if (distance <= 35) {
-      // Base charge for 5 km + ₹15 for each km from 5 to 20 km + ₹20 for each km from 20 to 35 km
-      charge = baseCharge + 5 * 10 + 15 * 15 + (distance - 20) * 20;
-    } else if (distance > 35 && distance <= 40) {
-      // Base charge for 5 km + ₹15 for each km from 5 to 20 km + ₹20 for each km from 20 to 35 km + ₹50 for each km from 35 to 40 km
-      charge = baseCharge + 5 * 10 + 15 * 15 + 15 * 20 + (distance - 35) * 50;
+  
+    if (distance < 10) {
+      // ₹27 base charge + ₹10 per km for distances lower than 10 km
+      charge = 27 + (distance * 10);
+    } else if (distance >= 10 && distance <= 30) {
+      // ₹10 per km for distances between 10 km and 30 km
+      charge = distance * 10;
     } else {
-      // For distances over 40 km, ₹60 for every km beyond 40 km
-      charge = baseCharge + 5 * 10 + 15 * 15 + 15 * 20 + 5 * 50 + (distance - 40) * 60;
+      // ₹7 per km for distances greater than 30 km
+      charge = distance * 8;
     }
-
+  
     // If both origin and destination are within 5 km radius of Manipur, but charge exceeds ₹100, cap the charge at ₹100
-    if (originDistanceFromCenter <= 5 && destinationDistanceFromCenter <= 5 && charge > 100) {
-      setDeliveryCharge("₹100");
+    if (originDistanceFromCenter <= 4.5 && destinationDistanceFromCenter <= 4.5 && charge > 100) {
+      setDeliveryCharge("₹120");
     } else {
       // Otherwise, show the calculated charge
       setDeliveryCharge(`₹${charge.toFixed(2)}`);
     }
   };
-
+  
   // Map click handler to capture origin/destination
   const MapClickHandler = () => {
     useMapEvents({
@@ -220,20 +228,85 @@ const DistanceCalculator = () => {
     }
   };
 
-  // Map redrawing logic to ensure the map is resized properly
-  const MapRedraw = () => {
-    const map = useMap();
-    useEffect(() => {
-      if (map) {
-        map.invalidateSize();
+  // Send data to Supabase
+  const storeDataInSupabase = async () => {
+    const { data, error } = await supabase
+      .from('distance_calculations')
+      .insert([
+        {
+          pickup_details: pickupDetails,
+          drop_details: dropDetails,
+          origin,
+          destination,
+          distance,
+          delivery_charge: deliveryCharge,
+          status: 'Pending',  // Default status
+        },
+      ])
+      .select('id'); // Request the id to be returned after insertion
+  
+    if (error) {
+      console.error('Error inserting data into Supabase:', error);
+      return;
+    }
+  
+    console.log('Data stored successfully:', data);
+    const insertedId = data[0].id; // Assuming data[0] is the inserted row
+    setOrderId(insertedId.toString()); // Store the order ID
+    setShowPopup(true); // Show the popup after the data is successfully stored
+  };
+
+  // Send data to Telegram function
+  const sendDataToTelegram = async () => {
+    const botToken = '7975276224:AAHaPCFjzwm7XhR6_fcN7i8LRCXs9ZQ2iOI'; // Replace with your Telegram Bot Token
+    const chatId = '956560646'; // Replace with your Telegram Chat ID
+    
+    const message = `
+      Pickup Details: ${pickupDetails}
+      Drop Details: ${dropDetails}
+      Origin: ${origin}
+      Destination: ${destination}
+      Distance: ${distance}
+      Delivery Charge: ${deliveryCharge}
+    `;
+    
+    try {
+      const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: message,
+        }),
+      });
+
+      if (response.ok) {
+        console.log('Message sent to Telegram');
+      } else {
+        console.error('Error sending message to Telegram');
+        alert('Failed to send message');
       }
-    }, [originCoords, destinationCoords, routeCoordinates, map]);
-    return null;
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Failed to send message');
+    }
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.inputSection}>
+        <div className={styles.inputGroup}>
+          <label>Pickup Details</label>
+          <textarea
+            value={pickupDetails}
+            onChange={(e) => setPickupDetails(e.target.value)}
+            className={styles.textarea}
+            placeholder="Enter pickup details(Name, Phone)"
+          />
+        </div>
+        
         <div className={styles.inputGroup}>
           <input
             type="text"
@@ -243,7 +316,7 @@ const DistanceCalculator = () => {
               fetchSuggestions(e.target.value, true); // Pass 'true' for origin
             }}
             className={styles.input}
-            placeholder="Enter origin"
+            placeholder="Enter Pickup Address"
           />
           {showOriginSuggestions && (
             <ul className={styles.suggestionsList}>
@@ -266,6 +339,15 @@ const DistanceCalculator = () => {
             </ul>
           )}
         </div>
+        <div className={styles.inputGroup}>
+          <label>Drop Details</label>
+          <textarea
+            value={dropDetails}
+            onChange={(e) => setDropDetails(e.target.value)}
+            className={styles.textarea}
+            placeholder="Enter drop details(Name, Phone)"
+          />
+        </div>
 
         <div className={styles.inputGroup}>
           <input
@@ -276,7 +358,7 @@ const DistanceCalculator = () => {
               fetchSuggestions(e.target.value, false); // Pass 'false' for destination
             }}
             className={styles.input}
-            placeholder="Enter destination"
+            placeholder="Enter drop details"
           />
           {showDestinationSuggestions && (
             <ul className={styles.suggestionsList}>
@@ -300,11 +382,25 @@ const DistanceCalculator = () => {
           )}
         </div>
 
+
         <button onClick={calculateDistance} className={styles.button}>
-          Calculate
+          Calculate Fare
         </button>
+        
         {distance && <p className={styles.distance}>Distance: {distance}</p>}
-        {deliveryCharge && <p className={styles.deliveryCharge}>Delivery Charge: {deliveryCharge}</p>}
+        {deliveryCharge && <p className={styles.deliveryCharge}>Delivery Fare: {deliveryCharge}</p>}
+
+        <button onClick={() => {
+          storeDataInSupabase();  // Store data in Supabase
+          sendDataToTelegram();  // Send data to Telegram
+        }} className={styles.button}>
+          Confirm Order
+        </button>
+        <br /><br />
+        <h3 className={styles.heading}>Please calculate the fare and confirm your booking. For standard orders, click the link below.</h3>
+        <div>
+        <Link href="/standard.pdf" className={styles.links}>Standard delivery rates.</Link>
+      </div>
       </div>
 
       <div className={styles.mapContainer}>
@@ -320,16 +416,28 @@ const DistanceCalculator = () => {
           <MapClickHandler />
           <MapRedraw />
           {originCoords && <Marker position={[originCoords.lat, originCoords.lng]}>
-            <Popup>Origin</Popup>
+            <Popup>{origin}</Popup>
           </Marker>}
           {destinationCoords && <Marker position={[destinationCoords.lat, destinationCoords.lng]}>
-            <Popup>Destination</Popup>
+            <Popup>{destination}</Popup>
           </Marker>}
-          {routeCoordinates.length > 0 && (
-            <Polyline positions={routeCoordinates} color="blue" />
-          )}
+          {routeCoordinates.length > 0 && <Polyline positions={routeCoordinates} />}
         </MapContainer>
       </div>
+
+      {/* Popup */}
+      {showPopup && orderId && (
+        <div className={styles.popup}>
+          <div className={styles.popupContent}>
+            <h2>Order ID: {orderId}</h2>
+            <p>Your order is in pending status.</p>
+
+            <button className={styles.closeButton} onClick={() => setShowPopup(false)}>
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
